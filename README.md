@@ -15,3 +15,23 @@ admin
 utente
 	scelta workspace
 	aggiunta preferenze
+
+workspace
+	id
+	nome
+	descrizione
+	categoria
+	attività
+
+attività
+	id
+	nome
+	descrizione
+	luogo
+	posti?(posti esauriti?)
+	preferenze
+
+preferenza
+	nome
+	descrizione
+	listaValoriPossibili
