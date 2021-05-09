@@ -2,11 +2,19 @@
   {
     "name": "Leonardo",
     "surname": "Di Caprio",
-    "password": "100:f01dc97c052bb5dc417628e76523ed36:362a624ab15ef896e8cf7e5be9c59099aa8f4c1c03f71608e8ad1b6705521188"
+    "password": "100:83a6302857c3b59771dab3195b5b03ee:bb1d0ce89069c459e83d27c967d4dd97068d42087c121924918553bcb59d7a45",
+    "isAdmin": true
   },
   {
     "name": "Pinco",
     "surname": "Pallo",
-    "password": "100:f01dc97c052bb5dc417628e76523ed36:362a624ab15ef896e8cf7e5be9c59099aa8f4c1c03f71608e8ad1b6705521188"
+    "password": "100:83a6302857c3b59771dab3195b5b03ee:bb1d0ce89069c459e83d27c967d4dd97068d42087c121924918553bcb59d7a45",
+    "isAdmin": false
+  },
+  {
+    "name": "Pincos",
+    "surname": "Pallo",
+    "password": "",
+    "isAdmin": false
   }
 ]
