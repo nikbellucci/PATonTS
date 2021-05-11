@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox styleClass="root" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proginternet.ui.help.FXMLHelpController">
+    <children>
+  
+		<Label fx:id="helpMsg" text="Help Scene. This is handled by the second controller."/>
+		
+		<Label fx:id="trialsMsg"/>
+		
+		<!-- Handler da completare -->
+		<Button text="Go to Login" />
+		
+	</children> 
+</VBox>
