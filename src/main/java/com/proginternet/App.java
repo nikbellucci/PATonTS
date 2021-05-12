@@ -10,8 +10,6 @@ import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import com.proginternet.models.User;
 import com.proginternet.utils.Auth;
@@ -42,8 +40,12 @@ public final class App extends Application{
         User person3 = new User("Pincos", "Pallo", "test2", "", false);
         ArrayList<User> test = parser.readOnJson(filename, User[].class);
         
-        if (User.checkUsername(person3.getUsername()))
+        if (!User.checkUsername(person3.getUsername()))
             test.add(person3);
+
+        for (User user : test) {
+            System.out.println(user.getUsername());
+        }
     }
 
     

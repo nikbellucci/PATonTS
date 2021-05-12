@@ -61,8 +61,8 @@ public class User {
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 usernameExist = true;
-            }else {
                 System.out.println("User exist: " + username);
+                break;
             }
         }
         
