@@ -3,14 +3,21 @@
     "name": "Leonardo",
     "surname": "Di Caprio",
     "username": "test",
-    "password": "100:5a9c353228c0ad92f520a9ed0478b41e:8bcf1ba6d5cfad36f395ec39914ddc749fdb97dedd357e27fb204eae1134c377",
+    "password": "100:98297f1224d53d42bce6d36eb6fb822a:dcf54d5613e60b13f40ec5218416ee88d5897c6a2c826c680bc99da7a77ede0f",
     "isAdmin": true
   },
   {
     "name": "Pinco",
     "surname": "Pallo",
     "username": "test2",
-    "password": "100:5a9c353228c0ad92f520a9ed0478b41e:8bcf1ba6d5cfad36f395ec39914ddc749fdb97dedd357e27fb204eae1134c377",
+    "password": "100:98297f1224d53d42bce6d36eb6fb822a:dcf54d5613e60b13f40ec5218416ee88d5897c6a2c826c680bc99da7a77ede0f",
+    "isAdmin": false
+  },
+  {
+    "name": "Pincos",
+    "surname": "Pallo",
+    "username": "test2",
+    "password": "",
     "isAdmin": false
   }
 ]
