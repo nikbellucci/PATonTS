@@ -4,16 +4,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.stream.JsonReader;
 
+
 public class JsonParser<T>{
 
-    public void writeOnJson(ArrayList<T> data, String fileName) {
+    public void writeOnJson(T[] data, String fileName) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter writer = new FileWriter(fileName);
@@ -26,17 +26,16 @@ public class JsonParser<T>{
         }
     }
 
-    public ArrayList<T> readOnJson(String filename) {
+    public T[] readOnJson(String filename, Class model) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        ArrayList<T> data = null;
+        T[] data = null;
         try {
             JsonReader reader = new JsonReader(new FileReader(filename));
-            data = gson.fromJson(reader, ArrayList.class);
-            
+            data = gson.fromJson(reader, model);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
- 
+
         return data;
     }
 

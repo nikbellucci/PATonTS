@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
 
 import com.proginternet.models.User;
 import com.proginternet.utils.Auth;
@@ -33,21 +32,14 @@ public final class App extends Application{
         person.setPassword(generatedSecuredPasswordHash);
         person2.setPassword(generatedSecuredPasswordHash);
 
-        ArrayList<User> users = new ArrayList<User>();
-
-        users.add(person);
-        users.add(person2);
+        User[] users = {person, person2, person3};
 
         JsonParser<User> parser = new JsonParser<User>();
 
         parser.writeOnJson(users, filename);
-        ArrayList<User> utenti = parser.readOnJson(filename);
+        User[] user = parser.readOnJson(filename, User[].class);
 
-        utenti.add(person3);
-        
-        boolean test = person3.checkUsername(person3.getUsername());
-
-        parser.writeOnJson(utenti, filename);
+        System.out.println(user[0].getName());
         
     }
 
@@ -55,7 +47,7 @@ public final class App extends Application{
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("./ui/login/admin.fxml"));
         primaryStage.setTitle("Admin panel");
-        primaryStage.setScene(new Scene(root, 1280, 720));
+        primaryStage.setScene(new Scene(root, 1920, 1080));
         primaryStage.show();
     }
 

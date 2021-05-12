@@ -49,25 +49,25 @@ public class User {
         return this.username;
     }
 
-    public boolean checkUsername(String username) {
+    // public boolean checkUsername(String username) {
 
-        String filename = "data/Users.json";
+    //     String filename = "data/Users.json";
 
-        boolean usernameExist = false;
+    //     boolean usernameExist = false;
 
-        JsonParser<User> parser = new JsonParser<User>();
-        ArrayList<User> users = parser.readOnJson(filename);
+    //     JsonParser<User> parser = new JsonParser<User>();
+    //     ArrayList<User> users = parser.readOnJson(filename);
 
-        for (int i = 0; i < users.size(); i++) {
-            // if (users.get(i).getUsername() == username) {
-            //     usernameExist = true;
-            //     System.out.println("User exist");
-            // } else {
-            //     usernameExist = false;
-            // }   
-        }
+    //     for (int i = 0; i < users.size(); i++) {
+    //         // if (users.get(i).getUsername() == username) {
+    //         //     usernameExist = true;
+    //         //     System.out.println("User exist");
+    //         // } else {
+    //         //     usernameExist = false;
+    //         // }   
+    //     }
         
-        return usernameExist;
+    //     return usernameExist;
 
-    }
+    // }
 }
