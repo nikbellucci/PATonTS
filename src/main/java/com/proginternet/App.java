@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.proginternet.models.User;
 import com.proginternet.utils.Auth;
@@ -25,22 +28,22 @@ public final class App extends Application{
 
         User person = new User("Leonardo", "Di Caprio", "test", "", true);
         User person2 = new User("Pinco", "Pallo", "test2", "", false);
-        User person3 = new User("Pincos", "Pallo", "test2", "", false);
         String filename = "data/Users.json";
 
         String generatedSecuredPasswordHash = Auth.generateStorngPasswordHash("ciao");
         person.setPassword(generatedSecuredPasswordHash);
         person2.setPassword(generatedSecuredPasswordHash);
 
-        User[] users = {person, person2, person3};
+        User[] users = {person, person2};
 
         JsonParser<User> parser = new JsonParser<User>();
 
-        parser.writeOnJson(users, filename);
-        User[] user = parser.readOnJson(filename, User[].class);
-
-        System.out.println(user[0].getName());
+        parser.writeOnJson(filename, users);
+        User person3 = new User("Pincos", "Pallo", "test2", "", false);
+        ArrayList<User> test = parser.readOnJson(filename, User[].class);
         
+        if (User.checkUsername(person3.getUsername()))
+            test.add(person3);
     }
 
     
