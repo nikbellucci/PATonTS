@@ -8,6 +8,7 @@ import com.proginternet.utils.JsonParser;
 public class User {
     private String name;
     private String surname;
+    private String email;
     private String username;
     private String password;
     private Date birthday;
@@ -49,10 +50,28 @@ public class User {
         return this.username;
     }
 
-    public static boolean checkUsername(String username) {
+    public static User checkUsername(String username) {
 
         String filename = "data/Users.json";
 
+        User object = null;
+
+        JsonParser<User> parser = new JsonParser<User>();
+        ArrayList<User> users = parser.readOnJson(filename, User[].class);
+
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                object = user;
+                break;
+            }
+        }
+        
+        return object;
+
+    }
+
+    public static boolean userExist(String username) {
+        String filename = "data/Users.json";
         boolean usernameExist = false;
 
         JsonParser<User> parser = new JsonParser<User>();
@@ -65,8 +84,7 @@ public class User {
                 break;
             }
         }
-        
-        return usernameExist;
 
+        return usernameExist;
     }
 }

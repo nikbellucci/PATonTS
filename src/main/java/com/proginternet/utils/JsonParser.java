@@ -14,12 +14,13 @@ import com.google.gson.JsonIOException;
 import com.google.gson.stream.JsonReader;
 
 
-public class JsonParser<T>{
+public class JsonParser<T> {
 
-    public void writeOnJson(String fileName, T[] data) {
+    public void writeOnJson(String filename, ArrayList<T> data) {
+        T[] array = this.toArray(data);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter writer = new FileWriter(fileName);
+            FileWriter writer = new FileWriter(filename);
             gson.toJson(data, writer);
             writer.close();
         } catch (JsonIOException e) {
@@ -40,6 +41,14 @@ public class JsonParser<T>{
         }
         List<T> tmp = Arrays.asList(data);
         return new ArrayList<T>(tmp);
+    }
+
+    private <T> T[] toArray(List<T> list) {
+        T[] toR = (T[]) java.lang.reflect.Array.newInstance(list.get(0).getClass(), list.size());
+        for (int i = 0; i < list.size(); i++) {
+            toR[i] = list.get(i);
+        }
+        return toR;
     }
 
 }

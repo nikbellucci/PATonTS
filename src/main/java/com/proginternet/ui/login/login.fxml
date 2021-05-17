@@ -7,13 +7,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
 
-<VBox styleClass="root" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proginternet.ui.login.FXMLAdminController">
+<VBox styleClass="root" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proginternet.ui.login.FXMLLoginController">
     <children>
-  
+
+		<Label text="Please type your username:"/>
+
+		<TextField fx:id="usernameField"/>
+
 		<Label text="Please type your password:"/>
   		
-  		<PasswordField fx:id="pf"/>
+  		<PasswordField fx:id="passwordField"/>
   			   
   		<Button onAction="#checkLogin" text="Login" />
 	
