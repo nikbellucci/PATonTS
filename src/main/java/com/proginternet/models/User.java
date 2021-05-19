@@ -13,6 +13,7 @@ public class User {
     private String password;
     private Date birthday;
     private boolean isAdmin;
+    private Long chatId;
 
     public User() {
         //must be empty for Gson lib
@@ -48,6 +49,14 @@ public class User {
 
     public String getUsername() {
         return this.username;
+    }
+
+    public Long getChat() {
+        return this.chatId;
+    }
+
+    public void setChat(Long cId) {
+        this.chatId=cId;
     }
 
     public static User checkUsername(String username) {
