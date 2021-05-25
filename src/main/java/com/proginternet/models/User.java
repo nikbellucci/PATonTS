@@ -14,6 +14,7 @@ public class User {
     private Date birthday;
     private boolean isAdmin;
     private Long chatId;
+    private ArrayList<String> workspace;
 
     public User() {
         //must be empty for Gson lib
@@ -49,6 +50,9 @@ public class User {
 
     public String getUsername() {
         return this.username;
+    }
+    public ArrayList<String> getWorkArray() {
+        return this.workspace;
     }
 
     public Long getChat() {
@@ -95,5 +99,24 @@ public class User {
         }
 
         return usernameExist;
+    }
+
+    public ArrayList<Workspace> getWorkspace(){
+        String filename = "data/Workspace.json";
+
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> ws = parser.readOnJson(filename, Workspace[].class);
+        ArrayList<Workspace> result = new ArrayList<Workspace>();
+
+        for (int i = 0; i < this.workspace.size(); i++) {
+            for (Workspace works : ws) {
+                if (works.getId().equals(this.workspace.get(i))) {
+                    result.add(works);
+                    System.out.println("workspace: " + works.getName());
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }
