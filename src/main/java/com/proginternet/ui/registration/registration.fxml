@@ -22,7 +22,7 @@
 		<Label text="Please type your username:"/>
 		<TextField fx:id="usernameField"/>
 
-		<Label text="Please type your username:"/>
+		<Label text="Please type your birthday:"/>
 		<DatePicker fx:id="birthdayField"/>
 
 		<Label text="Please type your password:"/>
@@ -30,9 +30,9 @@
   			   
   		<Button onAction="#signIn" text="Sign In" />
 	
-		<Button onAction="#showHelp" text="Go to Help" />
+		<Button onAction="#showLogin" text="Go to Login page" />
 		
-		<Text fx:id="loginMsg"/>
+		<Text fx:id="registrationMsg"/>
 	
 	</children>
   

@@ -10,14 +10,6 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class Auth {
 
-    public static void cryptPassword() {
-
-    }
-
-    public static void decryptPassword() {
-
-    }
-
     public static String generateStorngPasswordHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         int iterations = 100;
         char[] chars = password.toCharArray();

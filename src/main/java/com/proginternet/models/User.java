@@ -1,6 +1,6 @@
 package com.proginternet.models;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.proginternet.utils.JsonParser;
@@ -11,7 +11,7 @@ public class User {
     private String email;
     private String username;
     private String password;
-    private Date birthday;
+    private LocalDate birthday;
     private boolean isAdmin;
     private Long chatId;
     private ArrayList<String> workspace;
@@ -28,7 +28,7 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
-    public User(String name, String surname, String username, String password, Date birthday) {
+    public User(String name, String surname, String username, String password, LocalDate birthday) {
         this.name = name;
         this.surname = surname;
         this.username = username;

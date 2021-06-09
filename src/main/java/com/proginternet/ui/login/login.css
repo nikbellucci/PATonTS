@@ -1,0 +1,22 @@
+.root {
+    -fx-background-color: white;
+    
+}
+
+#passwordField {
+ -fx-fill: white;
+ -fx-font-weight: bold; 
+ -fx-font-size: 16px;
+}
+
+#loginButton {
+   -fx-font-family: "Arial";
+   -fx-text-fill: black;
+   
+}
+
+#registrationButton {
+    -fx-font-family: "Arial";
+    -fx-text-fill: black;
+    
+ }

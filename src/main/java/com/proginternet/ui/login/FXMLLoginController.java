@@ -3,7 +3,6 @@ package com.proginternet.ui.login;
 import java.io.IOException;
 
 import com.proginternet.models.User;
-import com.proginternet.ui.help.FXMLHelpController;
 import com.proginternet.utils.Auth;
 
 import javafx.event.ActionEvent;
@@ -51,22 +50,12 @@ public class FXMLLoginController {
 	 * Metodo che carica un'altra vista e trasferisce dati
 	 * 
 	 */
-    @FXML protected void showHelp(ActionEvent event) throws IOException {
-    	
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("./../help/help.fxml"));
-
-    	Parent help = loader.load();
-    		             
-		FXMLHelpController helpController = loader.getController();
-    		
-    	Scene helpScene = new Scene(help, 300, 300);
-    		
-    	helpController.copyTrials(trials);
-    		
+    @FXML protected void showRegistration(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("./../registration/registration.fxml"));
+    	Parent login = loader.load();	
+    	Scene loginScene = new Scene(login, 1280, 720);	
     	Stage stage = (Stage) loginMsg.getScene().getWindow();
-    		
-    	stage.setScene(helpScene);
-    		
+    	stage.setScene(loginScene);
         stage.show();
     }
 }
