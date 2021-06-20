@@ -1,6 +1,8 @@
 package com.proginternet.ui.login;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import com.proginternet.models.User;
 import com.proginternet.utils.Auth;
@@ -25,23 +27,32 @@ public class FXMLLoginController {
     private String password = "";
     private Integer trials = 0;
     
-    @FXML protected void checkLogin(ActionEvent event) throws Exception{
+    @FXML protected void checkLogin(ActionEvent event) {
 		this.trials++;
 
 		User user = User.checkUsername(usernameField.getText());
 
-		this.password = user.getPassword();
-        
-    	if (Auth.validatePassword(passwordField.getText(), this.password)) {
-    		loginMsg.setText("Login successfull!");
-    		loginMsg.setFill(Color.GREEN);
-    	}
-    	else {
-    		loginMsg.setText("Forgot your password? You tried "  + this.trials + " times...");
-    		loginMsg.setFill(Color.RED);
+		try {
+			this.password = user.getPassword();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+        try {
+			if (Auth.validatePassword(passwordField.getText(), this.password)) {
+				loginMsg.setText("Login successfull!");
+				loginMsg.setFill(Color.GREEN);
+			}
+			else {
+				loginMsg.setText("Forgot your password? You tried "  + this.trials + " times...");
+				loginMsg.setFill(Color.RED);
+			}
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			e.printStackTrace();
 		}
     		
     }
+	// dopo login apre workspace
 
     /***
 	 * 

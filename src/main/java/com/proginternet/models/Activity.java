@@ -6,6 +6,7 @@ public class Activity {
     private String name;
     private String description;
     private String where;
+    private String when;
     private int availableSeats;
     private Preference preferencies;
 

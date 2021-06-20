@@ -39,7 +39,7 @@ public class Seed {
                 System.out.println(user.getUsername());
             }
         } catch (Exception e) {
-            
+            e.printStackTrace();
         }
     }
     

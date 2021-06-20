@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.proginternet.utils.JsonParser;
 
 public class User {
+
     private String name;
     private String surname;
     private String email;
@@ -119,4 +120,5 @@ public class User {
         }
         return result;
     }
+    
 }
