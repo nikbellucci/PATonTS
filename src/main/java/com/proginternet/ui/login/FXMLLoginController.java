@@ -11,13 +11,11 @@ import com.proginternet.utils.Singleton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -41,8 +39,8 @@ public class FXMLLoginController {
 				this.password = user.getPassword();
 
 				if (Auth.validatePassword(passwordField.getText(), this.password)) {
-					System.out.println("logged");
-					FXMLLoader loader = new FXMLLoader(getClass().getResource("./../home/home.fxml"));
+					sendData(user);
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("./../workspace/workspace.fxml"));
 					Parent home = loader.load();	
 					Scene homeScene = new Scene(home, 1280, 720);	
 					Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -64,21 +62,8 @@ public class FXMLLoginController {
 
 	}
 
-	@FXML private void sendData(MouseEvent event) {
-		User user = new User();
-		Node node = (Node) event.getSource();
-		Stage stage = (Stage) node.getScene().getWindow();
-		stage.close();
-
-		try {
-			Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("./../home/home.fxml"));
-			Singleton holder = Singleton.getInstance();
-			holder.setUser(user);
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
-		} catch (Exception e) {
-			//TODO: handle exception
-		}
+	private void sendData(User user) {
+		Singleton holder = Singleton.getInstance();
+		holder.setUser(user);
 	}
 }

@@ -49,6 +49,10 @@ public class User {
         return this.name;
     }
 
+    public String getSurname() {
+        return this.surname;
+    }
+
     public String getUsername() {
         return this.username;
     }
@@ -119,6 +123,11 @@ public class User {
             }
         }
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User[nome=" + this.name + ", cognome="+ this.surname + ", username=" + this.username + "]";
     }
     
 }
