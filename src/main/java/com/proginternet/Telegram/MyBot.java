@@ -22,9 +22,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class MyBot extends TelegramLongPollingBot {
-
+    User us=null;
     boolean usernameResp=false;
     boolean passwordResp=false;
+    boolean phase=false;
     String user="";
     int tries=0;
     @Override
@@ -62,7 +63,8 @@ public class MyBot extends TelegramLongPollingBot {
 
         }
         else if (update.hasCallbackQuery()) {
-            switch (update.getCallbackQuery().getData()) {
+            String cbdata=update.getCallbackQuery().getData();
+            switch (cbdata) {
                 case "login":
                     loginUser(update.getCallbackQuery().getMessage(),"Invia username");
                     break;
@@ -75,8 +77,16 @@ public class MyBot extends TelegramLongPollingBot {
                     PreLoginMenu(update.getCallbackQuery().getMessage());
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
+
+                case "mainmenu":
+                    phase = true;
+                    PreLoginMenu(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
                 default:
-    
+                    if (cbdata.matches("^WS?://")) {
+                        //visualizzazione ws
+                    }
                     break;
             }
         }
@@ -86,10 +96,15 @@ public class MyBot extends TelegramLongPollingBot {
 
     //menu -----------------------------------------------------------------------------------------------------
     public void PreLoginMenu(Message mess){
-        System.out.println("MyBot here");
-
-        User us=alreadyLogged(mess.getChatId());
-        if (us!=null) MainMenu(mess, us);
+        
+        long temp=mess.getChatId();
+        us=alreadyLogged(temp);
+        
+        if (us!=null) {
+            System.out.println(us.isAdmin());
+            if(us.isAdmin()&&!phase) MenuAdmin(mess);
+            else MainMenu(mess);
+        }
         else {
             SendMessage message = new SendMessage() // Create a message object object
                 .setChatId(mess.getChatId())
@@ -115,7 +130,9 @@ public class MyBot extends TelegramLongPollingBot {
         } 
     }
 
-    public void MainMenu(Message mess, User us){
+    public void MainMenu(Message mess){
+        phase=false;
+        System.out.println("bang");
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(mess.getChatId())
             .setText("Bentornato in WorkSpaceBV "+ us.getUsername()+ "\nCosa vuoi fare?");
@@ -136,11 +153,62 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+    public void MenuAdmin(Message mess){
+        System.out.println("bang");
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Salve admin "+us.getName()+"!! " + "\nCosa vuole fare?");
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        rowInline.add(new InlineKeyboardButton().setText("Creazione/Aggiunta").setCallbackData("add"));
+        rowInline.add(new InlineKeyboardButton().setText("Modifica/Rimozione").setCallbackData("changes"));
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        rowInline2.add(new InlineKeyboardButton().setText("Main Menu").setCallbackData("mainmenu"));
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline);
+        rowsInline.add(rowInline2);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //creazione -----------------------------------------------------------------------------------------------
+
+    public void Creazione(Message mess){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Cosa vuoi creare o aggiungere?");
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        rowInline.add(new InlineKeyboardButton().setText("WorkSpace").setCallbackData("addWs"));
+        rowInline.add(new InlineKeyboardButton().setText("Attività").setCallbackData("addActivity"));
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        rowInline2.add(new InlineKeyboardButton().setText("Preferenza").setCallbackData("addPref"));
+        rowInline2.add(new InlineKeyboardButton().setText("Utente").setCallbackData("addUser"));
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
     //Visualizzazione workspace
-    public void ViewWS(Message mess, User us){
+    public void ViewWS(Message mess){
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(mess.getChatId())
             .setText("Ecco i tuoi workspace. Di quale vuoi avere piu informazione");
@@ -235,8 +303,6 @@ public class MyBot extends TelegramLongPollingBot {
         }
         return null;
     }
-
-
 
 
 

@@ -55,6 +55,10 @@ public class User {
         return this.workspace;
     }
 
+    public boolean isAdmin() {
+        return this.isAdmin;
+    }
+
     public Long getChat() {
         return this.chatId;
     }
