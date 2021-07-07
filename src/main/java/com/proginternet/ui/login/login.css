@@ -4,9 +4,9 @@
 }
 
 #passwordField {
- -fx-fill: white;
- -fx-font-weight: bold; 
- -fx-font-size: 16px;
+    -fx-fill: white;
+    -fx-font-weight: bold; 
+    -fx-font-size: 16px;
 }
 
 #loginButton {

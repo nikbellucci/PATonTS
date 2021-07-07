@@ -16,7 +16,7 @@
 		<Label fx:id="trialsMsg"/>
 		
 		<!-- Handler da completare -->
-		<Button onAction="#showLogin" text="Go to Login" />
+		<Button onAction="#receiveData" text="Go to Login" />
 		
 	</children> 
 </VBox>

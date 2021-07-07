@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 
 import com.proginternet.utils.Auth;
 import com.proginternet.utils.JsonParser;
+import com.proginternet.models.Activity;
 import com.proginternet.models.User;
 import com.proginternet.models.Workspace;
 
@@ -78,19 +79,42 @@ public class MyBot extends TelegramLongPollingBot {
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
+                case "viewW":
+                    ViewWS(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "choiceW":
+                    addWS(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
                 case "mainmenu":
                     phase = true;
                     PreLoginMenu(update.getCallbackQuery().getMessage());
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
                 default:
-                    if (cbdata.matches("^WS?://")) {
-                        //visualizzazione ws
+                    if (cbdata.startsWith("WS")) {
+                        WSDetails(update.getCallbackQuery().getMessage(), selectedObject(cbdata.substring(2)));
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if (cbdata.startsWith("ADD")) {
+                        us.addWS(cbdata.substring(3));
+                        try {
+                            updateOnJsonUserId(us.getWorkArray(), us.getUsername());
+                        } 
+                        catch (Exception e) {
+                            System.out.println("Errore");
+                        }
+                        PreLoginMenu(update.getCallbackQuery().getMessage());
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
                     }
                     break;
             }
         }
     }
+    
 
 
 
@@ -140,7 +164,7 @@ public class MyBot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         rowInline.add(new InlineKeyboardButton().setText("Visualizzazione workspasce").setCallbackData("viewW"));
-        rowInline.add(new InlineKeyboardButton().setText("Scelta nuovi workspace").setCallbackData("ChoiceW"));
+        rowInline.add(new InlineKeyboardButton().setText("Scelta nuovi workspace").setCallbackData("choiceW"));
         // Set the keyboard to the markup
         rowsInline.add(rowInline);
         // Add it to the message
@@ -188,11 +212,11 @@ public class MyBot extends TelegramLongPollingBot {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("WorkSpace").setCallbackData("addWs"));
-        rowInline.add(new InlineKeyboardButton().setText("Attività").setCallbackData("addActivity"));
+        rowInline.add(new InlineKeyboardButton().setText("WorkSpace").setCallbackData("newWs"));
+        rowInline.add(new InlineKeyboardButton().setText("Attività").setCallbackData("newActivity"));
         List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
-        rowInline2.add(new InlineKeyboardButton().setText("Preferenza").setCallbackData("addPref"));
-        rowInline2.add(new InlineKeyboardButton().setText("Utente").setCallbackData("addUser"));
+        rowInline2.add(new InlineKeyboardButton().setText("Preferenza").setCallbackData("newPref"));
+        rowInline2.add(new InlineKeyboardButton().setText("Utente").setCallbackData("newUser"));
         // Set the keyboard to the markup
         rowsInline.add(rowInline);
         // Add it to the message
@@ -211,14 +235,14 @@ public class MyBot extends TelegramLongPollingBot {
     public void ViewWS(Message mess){
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(mess.getChatId())
-            .setText("Ecco i tuoi workspace. Di quale vuoi avere piu informazione");
+            .setText("Ecco i tuoi workspace. Di quale vuoi avere piu informazione?");
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         ArrayList<Workspace> ws = new ArrayList<Workspace>();
         ws = us.getWorkspace();
         for (int i = 0; i < ws.size(); i++) {
-            rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData("WS" +  ws.get(i).getName()));
+            rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData("WS" +  ws.get(i).getId()));
         }
         // Set the keyboard to the markup
         rowsInline.add(rowInline);
@@ -232,6 +256,56 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+    public void WSDetails(Message mess, Workspace ws){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Informazioni relative al workspace: "+ ws.getName()+
+                     "\nDescrizione: "+ ws.getDescrizione()+
+                     "\nScadenza: "+ ws.getExpiration());
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        ArrayList<Activity> act = ws.getActivities();
+        // for (int i = 0; i < act.size(); i++) {
+        //     rowInline.add(new InlineKeyboardButton().setText(act.get(i).getName()).setCallbackData("ACT" +  act.get(i).getName()));
+        // }
+        rowInline.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Aggiunta Workspace
+    public void addWS(Message mess){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Quale workspace vuoi aggiungere?");
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        ArrayList<Workspace> ws = newWS();
+        for (int i = 0; i < ws.size(); i++) {
+            rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData("ADD" +  ws.get(i).getId()));
+        }
+        rowInline.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -257,6 +331,8 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+
+
 //Gestione login---------------------------------------------------------------------------------
 
     public void loginUser(Message message, String text){
@@ -278,7 +354,7 @@ public class MyBot extends TelegramLongPollingBot {
         if (user == null) loginUser(mess, "Username o password non corretti \nInviare l'username");
         else if(Auth.validatePassword(mess.getText(), user.getPassword())){
             user.setChat(mess.getChatId());
-            updateOnJsonUserId("data/Users.json", mess.getChatId(), user.getUsername());
+            updateOnJsonUserId(mess.getChatId(), user.getUsername());
             MainMenu(mess, user);
         }
         else {
@@ -319,22 +395,59 @@ public class MyBot extends TelegramLongPollingBot {
         
     }
 
-    public void updateOnJsonUserId(String filename, Long newParam, String un) throws Exception{
+    public <T> void updateOnJsonUserId(T newParam, String un) throws Exception{
         JsonParser<User> parser = new JsonParser<User>();
-        ArrayList<User> users = parser.readOnJson(filename, User[].class);
+        ArrayList<User> users = parser.readOnJson("data/Users.json", User[].class);
 
         for (User user : users) {
             if (user.getUsername().equals(un)) {
-                user.setChat(newParam);
+                if (newParam instanceof Long) {
+                    Long x=(Long)newParam;
+                    user.setChat(x);
+                    break;
+                }
+                else if (newParam instanceof ArrayList<?>) {
+                    ArrayList<String> x = (ArrayList<String>) newParam;
+                    user.setWorkArray(x);
+                    break;
+                }
+                
+            }
+        }
+        parser.writeOnJson("data/Users.json", users);
+    }
+
+    public Workspace selectedObject(String id){
+        String filename = "data/Workspace.json";
+
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> ws = parser.readOnJson(filename, Workspace[].class);
+        Workspace result = null;
+        for (Workspace works : ws) {
+            if (works.getId().equals(id)) {
+                result=works;
                 break;
             }
         }
-        parser.writeOnJson(filename, users);
+        return result;
     }
 
+    public ArrayList<Workspace> newWS(){
+        String filename = "data/Workspace.json";
+
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> ws = parser.readOnJson(filename, Workspace[].class);
+        ArrayList<Workspace> usws=us.getWorkspace();
 
 
-
+        for (int i = 0; i < usws.size(); i++) {
+            for (int j = 0; j < ws.size(); j++) {
+                
+                if(ws.get(j).getId().equals(usws.get(i).getId())) ws.remove(j);
+            }
+        }
+        return ws;
+    }
 
 
     @Override

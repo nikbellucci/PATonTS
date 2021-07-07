@@ -5,35 +5,24 @@
     "username": "test",
     "password": "100:aeaf668e7af46080e0e41dff30b0a6f4:d1e111ab0f58c4e5918471b7ef9873ae2f888db778124ddb3145caf05e5fb202",
     "isAdmin": true,
-    "chatId": 478734255
+    "chatId": 478734255,
+    "workspace": [
+      "1",
+      "2"
+    ]
   },
   {
     "name": "Pinco",
     "surname": "Pallo",
     "username": "test2",
-    "password": "100:6dd40854fae3e82ab524871f10891102:103c32da8e0cbe003e6486ca6940adf3882c20edbbf4c969d0fb2a9733d7bd6c",
-    "isAdmin": false,
-    "chatId": 0
+    "password": "100:934f7095f62b54101f26baca5958175a:6748db1e600f68e670d845a91ec2cd938964241568662af9586fbea82917ad95",
+    "isAdmin": false
   },
   {
     "name": "Pincos",
     "surname": "Pallo",
     "username": "test3",
     "password": "",
-    "isAdmin": false,
-    "chatId": 0
-  },
-  {
-    "name": "test",
-    "surname": "test",
-    "username": "test5",
-    "password": "100:d310ce0d57324fecacca0cc9f8cf79bc:f654a050cc93376a660bc19e7a0c2109bad3b2232daf7f39792442dedf6d18c6",
-    "birthday": {
-      "year": 2021,
-      "month": 6,
-      "day": 17
-    },
-    "isAdmin": false,
-    "chatId": 0
+    "isAdmin": false
   }
 ]

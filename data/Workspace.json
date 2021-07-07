@@ -1,0 +1,35 @@
+[
+  {
+    "id":"1",
+    "name": "Test workspace",
+    "description": "test descrizione",
+    "category": "test categoria",
+    "expiration": {
+      "year": 2020,
+      "month": 1,
+      "day": 8
+    }
+  },
+  {
+    "id":"2",
+    "name": "Test workspace1",
+    "description": "test descrizione",
+    "category": "test categoria",
+    "expiration": {
+      "year": 2020,
+      "month": 1,
+      "day": 8
+    }
+  },
+  {
+    "id":"3",
+    "name": "Test workspace2",
+    "description": "test descrizione",
+    "category": "test categoria",
+    "expiration": {
+      "year": 2020,
+      "month": 1,
+      "day": 8
+    }
+  }
+]

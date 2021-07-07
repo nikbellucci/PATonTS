@@ -19,9 +19,9 @@ public final class App extends Application{
 
     
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("./ui/registration/registration.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("./ui/login/login.fxml"));
 
-        primaryStage.setTitle("Admin panel");
+        primaryStage.setTitle("PaTonTS");
         primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
     }

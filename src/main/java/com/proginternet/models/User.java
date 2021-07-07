@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.proginternet.utils.JsonParser;
 
 public class User {
+
     private String name;
     private String surname;
     private String email;
@@ -48,11 +49,23 @@ public class User {
         return this.name;
     }
 
+    public String getSurname() {
+        return this.surname;
+    }
+
     public String getUsername() {
         return this.username;
     }
     public ArrayList<String> getWorkArray() {
         return this.workspace;
+    }
+
+    public void setWorkArray(ArrayList<String> s) {
+        this.workspace=s;
+    }
+
+    public void addWS(String id){
+        this.workspace.add(id);
     }
 
     public boolean isAdmin() {
@@ -123,4 +136,10 @@ public class User {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "User[nome=" + this.name + ", cognome="+ this.surname + ", username=" + this.username + "]";
+    }
+    
 }
