@@ -2,6 +2,7 @@ package com.proginternet.Telegram;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.lang.Math;
 import java.lang.reflect.Field;
 
@@ -24,11 +25,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class MyBot extends TelegramLongPollingBot {
     User us=null;
+    String actWSid;
     boolean usernameResp=false;
     boolean passwordResp=false;
     boolean phase=false;
+    Activity act=null;
     String user="";
     int tries=0;
+    String state="";
     @Override
     public String getBotUsername() {
         return "WorkSpaceBVbot";
@@ -39,26 +43,39 @@ public class MyBot extends TelegramLongPollingBot {
         
         if (update.hasMessage() && update.getMessage().hasText()) {
             
-            System.out.println("fufn");
             String msg = update.getMessage().getText();
             if (passwordResp) {
                 passwordResp=false;
                 try {
                     authenticationUsers(update.getMessage(), user);
                 } catch (Exception e) {
-                    SendMessage sendMessage = new SendMessage();
-                    sendMessage.setChatId(update.getMessage().getChatId());
-                    sendMessage.setText("Si è verificato un errore");
-                    try {
-                            execute(sendMessage);
-                    } catch (TelegramApiException x) {
-                            System.err.println(x.getMessage());
-                    }
-                    PreLoginMenu(update.getMessage());
+                    errore(update.getMessage());
                 }
             }
             else if (usernameResp) {user=msg; loginUser(update.getMessage(), "inviare la password");}
-            System.out.println("fufn");
+
+            if (state.startsWith("ACT")) {
+                String param="";
+                try {
+                    param=setValueActivity(msg, state.substring(3), act);
+                } catch (IllegalAccessException e) {
+                    errore(update.getMessage());
+                }
+                if(param.isEmpty()) {
+                    Workspace wos = selectedObject(actWSid);
+                    wos.addActivity(act);
+                    try {
+                        wsUpdateOnJson(wos.getActivities(), actWSid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    state="";
+                    actWSid="";
+                    PreLoginMenu(update.getMessage());
+                }
+                else addActivity(update.getMessage(), param);
+            }
+
             if (msg.equals("/start")) PreLoginMenu(update.getMessage());
             System.out.println(update.getCallbackQuery().getData());
 
@@ -68,10 +85,17 @@ public class MyBot extends TelegramLongPollingBot {
             switch (cbdata) {
                 case "login":
                     loginUser(update.getCallbackQuery().getMessage(),"Invia username");
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
                 
+                case "registrazione":
+                    loginUser(update.getCallbackQuery().getMessage(),"Invia username");
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
                 case "info":
                     infoBot(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
                 
                 case "menu":
@@ -84,8 +108,18 @@ public class MyBot extends TelegramLongPollingBot {
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
+                case "add":
+                    Creazione(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
                 case "choiceW":
                     addWS(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+                
+                case "newActivity":
+                    selectWS(update.getCallbackQuery().getMessage());
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
@@ -108,6 +142,12 @@ public class MyBot extends TelegramLongPollingBot {
                             System.out.println("Errore");
                         }
                         PreLoginMenu(update.getCallbackQuery().getMessage());
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if (cbdata.startsWith("THIS")) {
+                        actWSid=cbdata.substring(4);
+                        act=new Activity();
+                        addActivity(update.getCallbackQuery().getMessage(), "id");
                         deletePrevMessage(update.getCallbackQuery().getMessage());
                     }
                     break;
@@ -219,6 +259,7 @@ public class MyBot extends TelegramLongPollingBot {
         rowInline2.add(new InlineKeyboardButton().setText("Utente").setCallbackData("newUser"));
         // Set the keyboard to the markup
         rowsInline.add(rowInline);
+        rowsInline.add(rowInline2);
         // Add it to the message
         markupInline.setKeyboard(rowsInline);
         message.setReplyMarkup(markupInline);
@@ -229,6 +270,43 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+
+
+    public void selectWS(Message mess){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("A quale workspace vuoi aggiungere l'attività?");
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> ws = parser.readOnJson("data/Workspace.json", Workspace[].class);
+        for (int i = 0; i < ws.size(); i++) {
+            rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData("THIS" +  ws.get(i).getId()));
+        }
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addActivity(Message mess, String param){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Inserire "+ param);
+        state="ACT"+ param;
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     //Visualizzazione workspace
@@ -265,13 +343,17 @@ public class MyBot extends TelegramLongPollingBot {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
         ArrayList<Activity> act = ws.getActivities();
-        // for (int i = 0; i < act.size(); i++) {
-        //     rowInline.add(new InlineKeyboardButton().setText(act.get(i).getName()).setCallbackData("ACT" +  act.get(i).getName()));
-        // }
-        rowInline.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        if(!(act==null||act.isEmpty())){
+            for (int i = 0; i < act.size(); i++) {
+                rowInline.add(new InlineKeyboardButton().setText(act.get(i).getName()).setCallbackData("ACT" +  act.get(i).getName()));
+            }
+            rowsInline.add(rowInline);
+        }
+        rowInline2.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
         // Set the keyboard to the markup
-        rowsInline.add(rowInline);
+        rowsInline.add(rowInline2);
         // Add it to the message
         markupInline.setKeyboard(rowsInline);
         message.setReplyMarkup(markupInline);
@@ -287,16 +369,23 @@ public class MyBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(mess.getChatId())
             .setText("Quale workspace vuoi aggiungere?");
+        ArrayList<Workspace> ws = newWS();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        ArrayList<Workspace> ws = newWS();
-        for (int i = 0; i < ws.size(); i++) {
-            rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData("ADD" +  ws.get(i).getId()));
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        if(ws.size()==0){ message.setText("Partecipi a tutti i workspace!!");}
+        else{
+            for (int i = 0; i < ws.size(); i++) {
+                rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData("ADD" +  ws.get(i).getId()));
+            }
+            rowsInline.add(rowInline);
         }
-        rowInline.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        
+        rowInline2.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
         // Set the keyboard to the markup
-        rowsInline.add(rowInline);
+        
+        rowsInline.add(rowInline2);
         // Add it to the message
         markupInline.setKeyboard(rowsInline);
         message.setReplyMarkup(markupInline);
@@ -331,7 +420,30 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+//Registrazione---------------------------------------------------------------------------------
 
+    public void signUp(Message mess){
+        EditMessageText edit = new EditMessageText()
+            .setChatId(mess.getChatId())
+            .setMessageId(mess.getMessageId())
+            .setText("Benvenuto in WorkSpaceBV!! \n"+
+                    "Per registrarsi la invitiamo a contattare gli amministratori: \n"+
+                    "niccolo.bellucci2@studio.unibo.it\n"+
+                    "lorenzo.vincini@studio.unibo.it");
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        rowInline.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        rowsInline.add(rowInline);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        edit.setReplyMarkup(markupInline);
+        try {
+        execute(edit); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 //Gestione login---------------------------------------------------------------------------------
 
@@ -348,14 +460,15 @@ public class MyBot extends TelegramLongPollingBot {
             }
     }
 
-    public void authenticationUsers(Message mess, String us) throws Exception{
+    public void authenticationUsers(Message mess, String Us) throws Exception{
         passwordResp=false;
-        User user=User.checkUsername(us);
+        User user=User.checkUsername(Us);
         if (user == null) loginUser(mess, "Username o password non corretti \nInviare l'username");
         else if(Auth.validatePassword(mess.getText(), user.getPassword())){
             user.setChat(mess.getChatId());
             updateOnJsonUserId(mess.getChatId(), user.getUsername());
-            MainMenu(mess, user);
+            us=user;
+            MainMenu(mess);
         }
         else {
             tries++;
@@ -449,6 +562,64 @@ public class MyBot extends TelegramLongPollingBot {
         return ws;
     }
 
+    public <T> String setValueActivity(String mess, String param, T obj) throws IllegalAccessException {
+        Class fileEntityClass = (Class) obj.getClass();
+	    /* * Get all the attribute collections in the class */
+        Field[] fs = fileEntityClass.getDeclaredFields();
+        for(int i = 0;i<fs.length-1;i++){
+	        Field f = fs[i];
+            if (f.getName().equals(param)) {
+                f.setAccessible(true); // Set some properties to be accessible
+	    	    Object val = f.get(obj);// Get the value of this property
+	    	    System.out.println("name:" + f.getName() + "\t value = " + val);
+	    	    String type = f.getType().toString();// Get the type of this attribute
+	            if (type.endsWith("String")) {
+	    	        System.out.println(f.getType() + "\t is String");
+	    	        f.set(obj, mess); // set the value of the property
+	            } else if (type.endsWith("int") || type.endsWith("Integer")) {
+	    	        System.out.println(f.getType() + "\t is int");
+	    	        f.set(obj, Integer.parseInt(mess)); // set the value of the property
+	            } else System.out.println(f.getType() + "\t");
+                if(i<fs.length-2) return fs[i+1].getName();
+            }
+
+	    }
+        return "";
+    }
+
+    public void errore(Message mess){
+        SendMessage sendMessage = new SendMessage();
+                    sendMessage.setChatId(mess.getChatId());
+                    sendMessage.setText("Si è verificato un errore");
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException x) {
+            System.err.println(x.getMessage());
+        }
+        PreLoginMenu(mess);
+    }
+
+    public <T> void wsUpdateOnJson(T newParam, String un) throws Exception{
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> ws = parser.readOnJson("data/Workspace.json", Workspace[].class);
+
+        for (Workspace w : ws) {
+            if (w.getId().equals(un)) {
+                // if (newParam instanceof Long) {
+                //     Long x=(Long)newParam;
+                //     user.setChat(x);
+                //     break;
+                // }
+                if (newParam instanceof ArrayList<?>) {
+                    ArrayList<Activity> x = (ArrayList<Activity>) newParam;
+                    w.setActivities(x);
+                    break;
+                }
+                
+            }
+        }
+        parser.writeOnJson("data/Workspace.json", ws);
+    }
 
     @Override
     public String getBotToken() {

@@ -10,6 +10,16 @@ public class Activity {
     private int availableSeats;
     private Preference preferencies;
 
+    public Activity(){
+        id="";
+        name="";
+        description="";
+        where="";
+        when="";
+        availableSeats=0;
+        preferencies=null;
+    }
+
     public String getName(){
         return this.name;
     }
