@@ -35,6 +35,14 @@ public class Workspace {
         return this.activities;
     }
 
+    public void setActivities(ArrayList<Activity> acts){
+        this.activities=acts;
+    }
+
+    public void addActivity(Activity act){
+        activities.add(act);
+    }
+
     public String getName(){
         return this.name;
     }
