@@ -80,10 +80,6 @@ public class User {
         this.chatId=cId;
     }
 
-    public boolean getAdminPermission() {
-        return this.isAdmin;
-    }
-
     public static User checkUsername(String username) {
 
         String filename = "data/Users.json";

@@ -20,8 +20,4 @@ public class Singleton {
     public User getUser() {
         return this.user;
     }
-
-    public void removeUser() {
-        this.user = null;
-    }
 }
