@@ -19,6 +19,13 @@ public class Workspace {
         this.expiration = expiration;
     }
 
+    public Workspace() {
+        this.name = "";
+        this.description = "";
+        this.category = "";
+        this.expiration = null;
+    }
+
     public String getId(){
         return this.id;
     }

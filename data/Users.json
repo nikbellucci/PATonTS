@@ -8,7 +8,9 @@
     "chatId": 478734255,
     "workspace": [
       "1",
-      "2"
+      "2",
+      "133",
+      "3"
     ]
   },
   {
@@ -16,13 +18,28 @@
     "surname": "Pallo",
     "username": "test2",
     "password": "100:934f7095f62b54101f26baca5958175a:6748db1e600f68e670d845a91ec2cd938964241568662af9586fbea82917ad95",
-    "isAdmin": false
+    "isAdmin": false,
+    "chatId": 0
   },
   {
     "name": "Pincos",
     "surname": "Pallo",
     "username": "test3",
     "password": "",
-    "isAdmin": false
+    "isAdmin": false,
+    "chatId": 0
+  },
+  {
+    "name": "pippo",
+    "surname": "pippo",
+    "email": "pippo.pippo@pippo.pippo",
+    "username": "pippo",
+    "password": "100:9d840f50219265fbc2b57a704bfd667d:1970da5a2dad79115e008a8c47ba485c3c67ffacbc8a48ec7ac3b01fe353c62f",
+    "birthday": {
+      "year": 2001,
+      "month": 12,
+      "day": 12
+    },
+    "isAdmin": true
   }
 ]

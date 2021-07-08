@@ -2,9 +2,12 @@ package com.proginternet.Telegram;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.*;
 import java.util.Properties;
 import java.lang.Math;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import com.proginternet.utils.Auth;
 import com.proginternet.utils.JsonParser;
@@ -25,11 +28,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class MyBot extends TelegramLongPollingBot {
     User us=null;
+    User newUs=null;
     String actWSid;
     boolean usernameResp=false;
     boolean passwordResp=false;
     boolean phase=false;
     Activity act=null;
+    Workspace work=null;
     String user="";
     int tries=0;
     String state="";
@@ -57,7 +62,7 @@ public class MyBot extends TelegramLongPollingBot {
             if (state.startsWith("ACT")) {
                 String param="";
                 try {
-                    param=setValueActivity(msg, state.substring(3), act);
+                    param=setValueActivity(msg, state.substring(3), act, update.getMessage());
                 } catch (IllegalAccessException e) {
                     errore(update.getMessage());
                 }
@@ -71,9 +76,48 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                     state="";
                     actWSid="";
+                    act=new Activity();
                     PreLoginMenu(update.getMessage());
                 }
                 else addActivity(update.getMessage(), param);
+            }
+            else if (state.startsWith("WS")) {
+                String param="";
+                try {
+                    param=setValueActivity(msg, state.substring(2), work, update.getMessage());
+                } catch (IllegalAccessException e) {
+                    errore(update.getMessage());
+                }
+                if(param.isEmpty()) {
+                    try {
+                        wsUpdateOnJson(work, null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    state="";
+                    work=new Workspace();
+                    PreLoginMenu(update.getMessage());
+                }
+                else createWS(update.getMessage(), param);
+            } else if (state.startsWith("US")) {
+                String param="";
+                try {
+                    param=setValueActivity(msg, state.substring(2), newUs, update.getMessage());
+                } catch (IllegalAccessException e) {
+                    errore(update.getMessage());
+                }
+                if(param.isEmpty()) {
+                    try {
+                        newUs.setPassword(Auth.generateStorngPasswordHash(newUs.getPassword()));
+                        updateOnJsonUserId(newUs, null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    state="";
+                    newUs=new User();
+                    PreLoginMenu(update.getMessage());
+                }
+                else addUser(update.getMessage(), param);
             }
 
             if (msg.equals("/start")) PreLoginMenu(update.getMessage());
@@ -89,8 +133,7 @@ public class MyBot extends TelegramLongPollingBot {
                     break;
                 
                 case "registrazione":
-                    loginUser(update.getCallbackQuery().getMessage(),"Invia username");
-                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    signUp(update.getCallbackQuery().getMessage());
                     break;
 
                 case "info":
@@ -120,6 +163,34 @@ public class MyBot extends TelegramLongPollingBot {
                 
                 case "newActivity":
                     selectWS(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "newWs":
+                    work=new Workspace();
+                    SendMessage message = new SendMessage() // Create a message object object
+                        .setChatId(update.getCallbackQuery().getMessage().getChatId())
+                        .setText("Compilare i dati per la creazione di un WS");
+                    try {
+                        execute(message); // Sending our message object to user
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    createWS(update.getCallbackQuery().getMessage(), "id");
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "newUser":
+                    newUs=new User();
+                    SendMessage messag = new SendMessage() // Create a message object object
+                        .setChatId(update.getCallbackQuery().getMessage().getChatId())
+                        .setText("Compilare i dati per la creazione di un WS");
+                    try {
+                        execute(messag); // Sending our message object to user
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    addUser(update.getCallbackQuery().getMessage(), "name");
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
@@ -269,7 +340,20 @@ public class MyBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
+    
+    public void createWS(Message mess, String param){
+        
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Inserire "+ param);
+        if(param.equals("expiration")) message.setText("Inserire data di scadenza nel formato aaaa-mm-gg");
+        state="WS"+ param;
+        try { // Sending our message object to user
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public void selectWS(Message mess){
@@ -308,6 +392,21 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+
+    public void addUser(Message mess, String param){
+        
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Inserire "+ param);
+        if(param.equals("birthday")) message.setText("Inserire data di compleanno nel formato aaaa-mm-gg");
+        if(param.equals("isAdmin")) message.setText("Inserire se l'utente è un admin(si/no)");
+        state="US"+ param;
+        try { // Sending our message object to user
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
     //Visualizzazione workspace
     public void ViewWS(Message mess){
@@ -512,6 +611,12 @@ public class MyBot extends TelegramLongPollingBot {
         JsonParser<User> parser = new JsonParser<User>();
         ArrayList<User> users = parser.readOnJson("data/Users.json", User[].class);
 
+        if(newParam instanceof User){
+            users.add((User)newParam);
+            parser.writeOnJson("data/Users.json", users);
+            return;
+        }
+
         for (User user : users) {
             if (user.getUsername().equals(un)) {
                 if (newParam instanceof Long) {
@@ -562,7 +667,7 @@ public class MyBot extends TelegramLongPollingBot {
         return ws;
     }
 
-    public <T> String setValueActivity(String mess, String param, T obj) throws IllegalAccessException {
+    public <T> String setValueActivity(String mess, String param, T obj, Message mex) throws IllegalAccessException {
         Class fileEntityClass = (Class) obj.getClass();
 	    /* * Get all the attribute collections in the class */
         Field[] fs = fileEntityClass.getDeclaredFields();
@@ -579,7 +684,49 @@ public class MyBot extends TelegramLongPollingBot {
 	            } else if (type.endsWith("int") || type.endsWith("Integer")) {
 	    	        System.out.println(f.getType() + "\t is int");
 	    	        f.set(obj, Integer.parseInt(mess)); // set the value of the property
-	            } else System.out.println(f.getType() + "\t");
+	            } else if (type.endsWith("LocalDate")) {
+                    Pattern p = Pattern.compile(
+                        "^((2000|2400|2800|(19|2[0-9](0[48]|[2468][048]|[13579][26])))-02-29)$" 
+                        + "|^(((19|2[0-9])[0-9]{2})-02-(0[1-9]|1[0-9]|2[0-8]))$"
+                        + "|^(((19|2[0-9])[0-9]{2})-(0[13578]|10|12)-(0[1-9]|[12][0-9]|3[01]))$" 
+                        + "|^(((19|2[0-9])[0-9]{2})-(0[469]|11)-(0[1-9]|[12][0-9]|30))$");
+                    Matcher m = p.matcher(mess);
+                    if(m.matches()) {
+                        System.out.println(f.getType() + "\t is int");
+                        LocalDate ld = LocalDate.parse(mess);
+	    	            f.set(obj, ld); // set the value of the property
+                    } else {
+                        SendMessage sendMessage = new SendMessage();
+                            sendMessage.setChatId(mex.getChatId());
+                            sendMessage.setText("Valore inserito nel formato sbagliato");
+                        try {
+                            execute(sendMessage);
+                        } catch (TelegramApiException x) {
+                            System.err.println(x.getMessage());
+                        }
+                        return f.getName();
+                    }
+	    	        
+	            } else if (type.endsWith("boolean")) {
+                    if(mess.equalsIgnoreCase("si")||mess.equalsIgnoreCase("no")){
+                        if (mess.equalsIgnoreCase("si")) {
+                            System.out.println(f.getType() + "\t is int");
+	    	                f.set(obj, true); // set the value of the property
+                        }
+                        else f.set(obj, false);
+                    }else {
+                        SendMessage sendMessage = new SendMessage();
+                            sendMessage.setChatId(mex.getChatId());
+                            sendMessage.setText("Valore inserito nel formato sbagliato");
+                        try {
+                            execute(sendMessage);
+                        } catch (TelegramApiException x) {
+                            System.err.println(x.getMessage());
+                        }
+                        return f.getName();
+                    }
+                }
+                else System.out.println(f.getType() + "\t");
                 if(i<fs.length-2) return fs[i+1].getName();
             }
 
@@ -602,7 +749,11 @@ public class MyBot extends TelegramLongPollingBot {
     public <T> void wsUpdateOnJson(T newParam, String un) throws Exception{
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
         ArrayList<Workspace> ws = parser.readOnJson("data/Workspace.json", Workspace[].class);
-
+        if(newParam instanceof Workspace) {
+            ws.add((Workspace)newParam);
+            parser.writeOnJson("data/Workspace.json", ws);
+            return;
+        }
         for (Workspace w : ws) {
             if (w.getId().equals(un)) {
                 // if (newParam instanceof Long) {
@@ -615,6 +766,7 @@ public class MyBot extends TelegramLongPollingBot {
                     w.setActivities(x);
                     break;
                 }
+                
                 
             }
         }

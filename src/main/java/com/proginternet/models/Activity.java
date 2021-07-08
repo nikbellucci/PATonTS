@@ -1,5 +1,7 @@
 package com.proginternet.models;
 
+import java.util.ArrayList;
+
 public class Activity {
     
     private String id;
@@ -8,7 +10,7 @@ public class Activity {
     private String where;
     private String when;
     private int availableSeats;
-    private Preference preferencies;
+    private ArrayList<Preference> preferencies;
 
     public Activity(){
         id="";

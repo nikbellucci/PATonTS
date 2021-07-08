@@ -6,6 +6,6 @@ public class Preference {
     
     private String name;
     private String description;
-    private ArrayList valueSelection;
+    private ArrayList<String> valueSelection;
     
 }
