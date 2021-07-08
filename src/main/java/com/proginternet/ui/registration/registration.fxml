@@ -1,39 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox styleClass="root" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proginternet.ui.registration.FXMLRegistrationController">
-    <children>
-
-		<Label text="Please type your name:"/>
-		<TextField fx:id="nameField"/>
-
-		<Label text="Please type your surname:"/>
-		<TextField fx:id="surnameField"/>
-
-		<Label text="Please type your username:"/>
-		<TextField fx:id="usernameField"/>
-
-		<Label text="Please type your birthday:"/>
-		<DatePicker fx:id="birthdayField"/>
-
-		<Label text="Please type your password:"/>
-  		<PasswordField fx:id="passwordField"/>
-  			   
-  		<Button onAction="#signIn" text="Sign In" />
-	
-		<Button onAction="#showLogin" text="Go to Login page" />
-		
-		<Text fx:id="registrationMsg"/>
-	
-	</children>
-  
-</VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proginternet.ui.registration.FXMLRegistrationController">
+	<children>
+		<Pane prefHeight="139.0" prefWidth="944.0" style="-fx-background-color: #2D75E8;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		  <children>
+					<Label layoutX="550.0" layoutY="40.0" text="PaTonTs" textFill="WHITE">
+					   <font>
+						  <Font size="48.0" />
+					   </font>
+					</Label>
+		  </children>
+		</Pane>
+	   <Pane layoutX="38.0" layoutY="155.0" prefHeight="532.0" prefWidth="1204.0">
+		  <children>
+			 <Label layoutX="412.0" layoutY="175.0" text="Username">
+				<font>
+				   <Font name="System Bold" size="20.0" />
+				</font>
+			 </Label>
+			 <Label layoutX="414.0" layoutY="222.0" text="Password">
+				<font>
+				   <Font name="System Bold" size="20.0" />
+				</font>
+			 </Label>
+			 <Button fx:id="registrationButton" alignment="CENTER" layoutX="506.0" layoutY="338.0" mnemonicParsing="false" onAction="#signIn" prefHeight="34.0" prefWidth="123.0" text="Registra utente" />
+			 <Text fx:id="registrationMsg" layoutX="373.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="300.0" />
+            <TextField fx:id="usernameField" layoutX="506.0" layoutY="175.0" />
+            <PasswordField fx:id="passwordField" layoutX="506.0" layoutY="222.0" />
+            <TextField fx:id="nameField" layoutX="506.0" layoutY="84.0" />
+            <TextField fx:id="surnameField" layoutX="506.0" layoutY="129.0" />
+            <Label layoutX="414.0" layoutY="129.0" text="Cognome">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="445.0" layoutY="84.0" text="Nome">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="birthdayField" layoutX="506.0" layoutY="269.0" />
+            <Label layoutX="373.0" layoutY="269.0" text="Data di nascita">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="backButton" alignment="CENTER" layoutX="25.0" layoutY="20.0" mnemonicParsing="false" onAction="#showWorkspace" prefHeight="34.0" prefWidth="123.0" text="Indietro" />
+            <CheckBox fx:id="isAdminCheck" layoutX="691.0" layoutY="86.0" mnemonicParsing="false" text="Amministratore">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </CheckBox>
+		  </children>
+	   </Pane>
+	 </children>
+</AnchorPane>

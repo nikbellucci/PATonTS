@@ -8,7 +8,33 @@
       "year": 2020,
       "month": 1,
       "day": 8
-    }
+    },
+    "activities": [
+      {
+        "id": "1",
+        "name": "test1",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5
+      },
+      {
+        "id": "2",
+        "name": "test2",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5
+      },
+      {
+        "id": "3",
+        "name": "test3",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5
+      }
+    ]
   },
   {
     "id": "2",
@@ -22,8 +48,24 @@
     },
     "activities": [
       {
-        "id": "12",
-        "name": "test",
+        "id": "4",
+        "name": "test4",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5
+      },
+      {
+        "id": "5",
+        "name": "test5",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5
+      },
+      {
+        "id": "6",
+        "name": "test6",
         "description": "test",
         "where": "test",
         "when": "test",
@@ -40,6 +82,32 @@
       "year": 2020,
       "month": 1,
       "day": 8
-    }
+    },
+    "activities": [
+      {
+        "id": "7",
+        "name": "test7",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5
+      },
+      {
+        "id": "8",
+        "name": "test8",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5
+      },
+      {
+        "id": "9",
+        "name": "test9",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5
+      }
+    ]
   }
 ]

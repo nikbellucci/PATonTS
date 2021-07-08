@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -27,6 +28,7 @@ public class FXMLRegistrationController {
 	@FXML private TextField surnameField;
 	@FXML private TextField usernameField;
 	@FXML private DatePicker birthdayField;
+	@FXML private CheckBox isAdminCheck;
     
     @FXML protected void signIn(ActionEvent event) throws Exception {
 
@@ -35,7 +37,7 @@ public class FXMLRegistrationController {
 		ArrayList<User> users = parser.readOnJson(filename, User[].class);
 
 		if(!User.userExist(usernameField.getText())) {
-			User newUser = new User(nameField.getText(), surnameField.getText(), usernameField.getText(), Auth.generateStorngPasswordHash(passwordField.getText()), birthdayField.getValue());
+			User newUser = new User(nameField.getText(), surnameField.getText(), usernameField.getText(), Auth.generateStorngPasswordHash(passwordField.getText()), birthdayField.getValue(), isAdminCheck.isSelected());
 			users.add(newUser);
 			System.out.println(newUser);
 			parser.writeOnJson(filename, users);
@@ -48,13 +50,12 @@ public class FXMLRegistrationController {
     		
     }
 
-    @FXML protected void showLogin(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("./../login/login.fxml"));
-    	Parent login = loader.load();	
-    	Scene loginScene = new Scene(login, 1280, 720);	
-		loginScene.getStylesheets().add(getClass().getResource("./../login/login.css").toExternalForm());
+    @FXML protected void showWorkspace(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("./../workspace/workspace.fxml"));
+    	Parent workspace = loader.load();	
+    	Scene workspaceScene = new Scene(workspace, 1280, 720);	
     	Stage stage = (Stage) registrationMsg.getScene().getWindow();	
-    	stage.setScene(loginScene);	
+    	stage.setScene(workspaceScene);	
         stage.show();
     }
 }

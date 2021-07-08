@@ -24,5 +24,19 @@
     "username": "test3",
     "password": "",
     "isAdmin": false
+  },
+  {
+    "name": "Pincos",
+    "surname": "Pallo",
+    "username": "test4",
+    "password": "",
+    "isAdmin": false
+  },
+  {
+    "name": "Pincos",
+    "surname": "Pallo",
+    "username": "test5",
+    "password": "",
+    "isAdmin": false
   }
 ]
