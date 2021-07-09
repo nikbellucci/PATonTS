@@ -26,7 +26,6 @@
     "surname": "Pallo",
     "username": "test3",
     "password": "",
-<<<<<<< HEAD
     "isAdmin": false,
     "chatId": 0
   },
@@ -42,22 +41,5 @@
       "day": 12
     },
     "isAdmin": true
-=======
-    "isAdmin": false
-  },
-  {
-    "name": "Pincos",
-    "surname": "Pallo",
-    "username": "test4",
-    "password": "",
-    "isAdmin": false
-  },
-  {
-    "name": "Pincos",
-    "surname": "Pallo",
-    "username": "test5",
-    "password": "",
-    "isAdmin": false
->>>>>>> 024caeb4fc11e329e22b4529f63cd72f340ea476
   }
 ]

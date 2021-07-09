@@ -93,20 +93,6 @@
       "year": 2020,
       "month": 1,
       "day": 8
-<<<<<<< HEAD
-    }
-  },
-  {
-    "id": "133",
-    "name": "test3",
-    "description": "test3",
-    "category": "test3",
-    "expiration": {
-      "year": 2021,
-      "month": 7,
-      "day": 30
-    }
-=======
     },
     "activities": [
       {
@@ -134,6 +120,5 @@
         "availableSeats": 5
       }
     ]
->>>>>>> 024caeb4fc11e329e22b4529f63cd72f340ea476
   }
 ]
