@@ -24,6 +24,7 @@ public class Workspace {
         this.description = "";
         this.category = "";
         this.expiration = null;
+        this.activities = new ArrayList<Activity>() ;
     }
 
     public String getId(){
@@ -47,6 +48,15 @@ public class Workspace {
     }
 
     public void addActivity(Activity act){
+        activities.add(act);
+    }
+
+    public void updateActivities(Activity act){
+        for (int i = 0; i < activities.size(); i++) {
+            if (activities.get(i).getId().equals(act.getId())) {
+                activities.remove(i);
+            }
+        }
         activities.add(act);
     }
 

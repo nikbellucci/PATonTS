@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import com.proginternet.utils.Auth;
 import com.proginternet.utils.JsonParser;
 import com.proginternet.models.Activity;
+import com.proginternet.models.Preference;
 import com.proginternet.models.User;
 import com.proginternet.models.Workspace;
 
@@ -30,14 +31,17 @@ public class MyBot extends TelegramLongPollingBot {
     User us=null;
     User newUs=null;
     String actWSid;
+    String prefACTid;
     boolean usernameResp=false;
     boolean passwordResp=false;
     boolean phase=false;
     Activity act=null;
     Workspace work=null;
+    Preference pref=null;
     String user="";
     int tries=0;
     String state="";
+    ArrayList<String> value;
     @Override
     public String getBotUsername() {
         return "WorkSpaceBVbot";
@@ -59,10 +63,10 @@ public class MyBot extends TelegramLongPollingBot {
             }
             else if (usernameResp) {user=msg; loginUser(update.getMessage(), "inviare la password");}
 
-            if (state.startsWith("ACT")) {
+            if (state.startsWith("ACT")) {               //Creazione e riempimento valori activity e aggiornamento file
                 String param="";
                 try {
-                    param=setValueActivity(msg, state.substring(3), act, update.getMessage());
+                    param=setValueActivity(msg, state.substring(3), act, update.getMessage(),1);
                 } catch (IllegalAccessException e) {
                     errore(update.getMessage());
                 }
@@ -81,10 +85,10 @@ public class MyBot extends TelegramLongPollingBot {
                 }
                 else addActivity(update.getMessage(), param);
             }
-            else if (state.startsWith("WS")) {
+            else if (state.startsWith("WS")) {          //Creazione e riempimento valori workspace e aggiornamento file
                 String param="";
                 try {
-                    param=setValueActivity(msg, state.substring(2), work, update.getMessage());
+                    param=setValueActivity(msg, state.substring(2), work, update.getMessage(),1);
                 } catch (IllegalAccessException e) {
                     errore(update.getMessage());
                 }
@@ -99,10 +103,10 @@ public class MyBot extends TelegramLongPollingBot {
                     PreLoginMenu(update.getMessage());
                 }
                 else createWS(update.getMessage(), param);
-            } else if (state.startsWith("US")) {
+            } else if (state.startsWith("US")) {                //Creazione e riempimento valori utente e aggiornamento file
                 String param="";
                 try {
-                    param=setValueActivity(msg, state.substring(2), newUs, update.getMessage());
+                    param=setValueActivity(msg, state.substring(2), newUs, update.getMessage(), 2);
                 } catch (IllegalAccessException e) {
                     errore(update.getMessage());
                 }
@@ -118,6 +122,30 @@ public class MyBot extends TelegramLongPollingBot {
                     PreLoginMenu(update.getMessage());
                 }
                 else addUser(update.getMessage(), param);
+            }else if (state.startsWith("PREF")) {                   //Creazione e riempimento valori preferenze e aggiornamento file
+                String param="";
+                try {
+                    param=setValueActivity(msg, state.substring(4), pref, update.getMessage(), 0);
+                } catch (IllegalAccessException e) {
+                    errore(update.getMessage());
+                }
+                if(param.isEmpty()) {
+                    Workspace wos = selectedObject(actWSid);
+                    Activity as = selectedActivity(actWSid, prefACTid);
+                    as.addPref(pref);
+                    wos.updateActivities(as);
+                    try {
+                        wsUpdateOnJson(wos.getActivities(), actWSid); //change
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    state="";
+                    actWSid="";
+                    pref=new Preference();
+                    value=new ArrayList<String>();
+                    PreLoginMenu(update.getMessage());
+                }
+                else addPrefe(update.getMessage(), param);
             }
 
             if (msg.equals("/start")) PreLoginMenu(update.getMessage());
@@ -162,7 +190,12 @@ public class MyBot extends TelegramLongPollingBot {
                     break;
                 
                 case "newActivity":
-                    selectWS(update.getCallbackQuery().getMessage());
+                    selectWS(update.getCallbackQuery().getMessage(),"THIS");
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "newPref":
+                    selectWS(update.getCallbackQuery().getMessage(),"THAT");
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
@@ -219,6 +252,18 @@ public class MyBot extends TelegramLongPollingBot {
                         actWSid=cbdata.substring(4);
                         act=new Activity();
                         addActivity(update.getCallbackQuery().getMessage(), "id");
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if (cbdata.startsWith("THAT")) {
+                        actWSid=cbdata.substring(4);
+                        selectACT(update.getCallbackQuery().getMessage(), actWSid);
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if (cbdata.startsWith("THUT")) {
+                        prefACTid=cbdata.substring(4);
+                        pref=new Preference();
+                        value=new ArrayList<String>();
+                        addPrefe(update.getCallbackQuery().getMessage(), "name");
                         deletePrevMessage(update.getCallbackQuery().getMessage());
                     }
                     break;
@@ -356,7 +401,7 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
 
-    public void selectWS(Message mess){
+    public void selectWS(Message mess, String selector){
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(mess.getChatId())
             .setText("A quale workspace vuoi aggiungere l'attività?");
@@ -366,7 +411,31 @@ public class MyBot extends TelegramLongPollingBot {
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
         ArrayList<Workspace> ws = parser.readOnJson("data/Workspace.json", Workspace[].class);
         for (int i = 0; i < ws.size(); i++) {
-            rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData("THIS" +  ws.get(i).getId()));
+            rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData(selector +  ws.get(i).getId()));
+        }
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void selectACT(Message mess, String id){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("A quale workspace vuoi aggiungere l'attività?");
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        ArrayList<Activity> acti=selectedObject(id).getActivities();
+
+        for (int i = 0; i < acti.size(); i++) {
+            rowInline.add(new InlineKeyboardButton().setText(acti.get(i).getName()).setCallbackData("THUT" +  acti.get(i).getId()));
         }
         // Set the keyboard to the markup
         rowsInline.add(rowInline);
@@ -385,6 +454,19 @@ public class MyBot extends TelegramLongPollingBot {
             .setChatId(mess.getChatId())
             .setText("Inserire "+ param);
         state="ACT"+ param;
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addPrefe(Message mess, String param){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Inserire "+ param);
+        if(param.equals("valueSelection")) message.setText("Inserire i valori delle possibili preferenze (scrivere fine per terminare l'inserzione)");
+        state="PREF"+ param;
         try {
             execute(message); // Sending our message object to user
         } catch (TelegramApiException e) {
@@ -640,11 +722,30 @@ public class MyBot extends TelegramLongPollingBot {
 
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
         ArrayList<Workspace> ws = parser.readOnJson(filename, Workspace[].class);
-        Workspace result = null;
+        Workspace result = new Workspace();
         for (Workspace works : ws) {
             if (works.getId().equals(id)) {
                 result=works;
                 break;
+            }
+        }
+        return result;
+    }
+
+    public Activity selectedActivity(String idWS, String idACT){
+        String filename = "data/Workspace.json";
+
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> ws = parser.readOnJson(filename, Workspace[].class);
+        Activity result = new Activity();
+        for (Workspace works : ws) {
+            if (works.getId().equals(idWS)) {
+                for (Activity a : works.getActivities()) {
+                    if (a.getId().equals(idACT)) {
+                        result=a;
+                        break;
+                    }
+                }
             }
         }
         return result;
@@ -667,11 +768,11 @@ public class MyBot extends TelegramLongPollingBot {
         return ws;
     }
 
-    public <T> String setValueActivity(String mess, String param, T obj, Message mex) throws IllegalAccessException {
+    public <T> String setValueActivity(String mess, String param, T obj, Message mex, int skip) throws IllegalAccessException {
         Class fileEntityClass = (Class) obj.getClass();
 	    /* * Get all the attribute collections in the class */
         Field[] fs = fileEntityClass.getDeclaredFields();
-        for(int i = 0;i<fs.length-1;i++){
+        for(int i = 0;i<fs.length-skip;i++){
 	        Field f = fs[i];
             if (f.getName().equals(param)) {
                 f.setAccessible(true); // Set some properties to be accessible
@@ -706,7 +807,6 @@ public class MyBot extends TelegramLongPollingBot {
                         }
                         return f.getName();
                     }
-	    	        
 	            } else if (type.endsWith("boolean")) {
                     if(mess.equalsIgnoreCase("si")||mess.equalsIgnoreCase("no")){
                         if (mess.equalsIgnoreCase("si")) {
@@ -725,9 +825,16 @@ public class MyBot extends TelegramLongPollingBot {
                         }
                         return f.getName();
                     }
+                } else if (type.endsWith("ArrayList")) {
+                    if(mess.equalsIgnoreCase("fine")){
+                        f.set(obj, value);
+                    }else {
+                        value.add(mess);
+                        return f.getName();
+                    }
                 }
                 else System.out.println(f.getType() + "\t");
-                if(i<fs.length-2) return fs[i+1].getName();
+                if(i<fs.length-(skip+1)) return fs[i+1].getName();
             }
 
 	    }

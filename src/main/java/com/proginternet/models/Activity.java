@@ -19,10 +19,18 @@ public class Activity {
         where="";
         when="";
         availableSeats=0;
-        preferencies=null;
+        preferencies=new ArrayList<Preference>();
     }
 
     public String getName(){
         return this.name;
+    }
+
+    public void addPref(Preference p){
+        preferencies.add(p);
+    }
+
+    public String getId(){
+        return this.id;
     }
 }

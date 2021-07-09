@@ -27,7 +27,18 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": [
+          {
+            "name": "orario",
+            "description": "orario frequenza",
+            "valueSelection": [
+              "5:00",
+              "6:00",
+              "7:00"
+            ]
+          }
+        ]
       }
     ]
   },
