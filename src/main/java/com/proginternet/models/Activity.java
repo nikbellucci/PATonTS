@@ -22,6 +22,13 @@ public class Activity {
         preferencies=new ArrayList<Preference>();
     }
 
+    public Activity(String id, String name, String description, String where) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.where = where;
+    }
+
     public String getName(){
         return this.name;
     }

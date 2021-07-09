@@ -34,6 +34,7 @@ public class FXMLWorkspaceController {
     @FXML private Text welcomeUser;
     @FXML private MenuButton dropdownMenu;
     @FXML private Menu userMenu;
+    @FXML private Menu activityMenu;
     @FXML private Menu workspaceMenu;
 
     private ArrayList<Workspace> workspaces;
@@ -50,6 +51,8 @@ public class FXMLWorkspaceController {
             userMenu.setVisible(false);
             workspaceMenu.setDisable(true);
             workspaceMenu.setVisible(false);
+            activityMenu.setDisable(true);
+            activityMenu.setVisible(false);
         }
 
     }
@@ -173,6 +176,44 @@ public class FXMLWorkspaceController {
         System.out.println(path);
 
         ZipTool.zipDirectory(dir, path);
+    }
+
+    @FXML public void createActivity() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./../activity/createActivity/create-activity.fxml"));
+            Parent login = loader.load();
+            Scene loginScene = new Scene(login, 1280, 720);
+            Stage stage = (Stage) welcomeUser.getScene().getWindow();
+            stage.setScene(loginScene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML public void removeActivity() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./../activity/removeActivity/remove-activity.fxml"));
+            Parent login = loader.load();
+            Scene loginScene = new Scene(login, 1280, 720);
+            Stage stage = (Stage) welcomeUser.getScene().getWindow();
+            stage.setScene(loginScene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML public void assignActivity() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./../activity/assignActivity/assign-activity.fxml"));
+            Parent login = loader.load();
+            Scene loginScene = new Scene(login, 1280, 720);
+            Stage stage = (Stage) welcomeUser.getScene().getWindow();
+            stage.setScene(loginScene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

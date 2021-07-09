@@ -1,5 +1,8 @@
 package com.proginternet;
 
+import java.io.File;
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +17,16 @@ public final class App extends Application{
 
     public static void main(String[] args) {
         //Seed.init();
+        File user = new File("data/Users.json");
+        File workspace = new File("data/Workspace.json");
+        File preferences = new File("data/Preference.json");
+        try {
+            user.createNewFile();
+            workspace.createNewFile();
+            preferences.createNewFile();           
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         launch(args);
     }
 

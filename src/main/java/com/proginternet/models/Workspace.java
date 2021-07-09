@@ -19,6 +19,14 @@ public class Workspace {
         this.expiration = expiration;
     }
 
+    public Workspace(String id, String name, String description, String category, LocalDate expiration) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.expiration = expiration;
+    }
+
     public Workspace() {
         this.name = "";
         this.description = "";
