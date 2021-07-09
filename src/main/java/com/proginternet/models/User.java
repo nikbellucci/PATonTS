@@ -37,6 +37,15 @@ public class User {
         this.birthday = birthday;
     }
 
+    public User(String name, String surname, String username, String password, LocalDate birthday, boolean isAdmin) {
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.password = password;
+        this.birthday = birthday;
+        this.isAdmin = isAdmin;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -78,6 +87,10 @@ public class User {
 
     public void setChat(Long cId) {
         this.chatId=cId;
+    }
+
+    public boolean getAdminPermission() {
+        return this.isAdmin;
     }
 
     public static User checkUsername(String username) {

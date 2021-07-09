@@ -13,7 +13,7 @@ public final class App extends Application{
      */
 
     public static void main(String[] args) {
-        Seed.init();
+        //Seed.init();
         launch(args);
     }
 

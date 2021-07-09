@@ -19,12 +19,21 @@ public class Workspace {
         this.expiration = expiration;
     }
 
+<<<<<<< HEAD
     public Workspace() {
         this.name = "";
         this.description = "";
         this.category = "";
         this.expiration = null;
         this.activities = new ArrayList<Activity>() ;
+=======
+    public Workspace(String id, String name, String description, String category, LocalDate expiration) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.expiration = expiration;
+>>>>>>> 024caeb4fc11e329e22b4529f63cd72f340ea476
     }
 
     public String getId(){
