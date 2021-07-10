@@ -7,18 +7,28 @@ import com.proginternet.models.Activity;
 import com.proginternet.models.User;
 import com.proginternet.models.Workspace;
 import com.proginternet.utils.JsonParser;
+import com.sun.prism.paint.Color;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class FXMLAssignActivityController {
     
@@ -49,6 +59,26 @@ public class FXMLAssignActivityController {
         observableList.removeAll(observableList);
         observableList.addAll(names);
         userList.getItems().addAll(observableList);
+
+        userList.setCellFactory(CheckBoxListCell.forListView(new Callback<String,ObservableValue<Boolean>>(){
+            public ObservableValue<Boolean> call(String item) {
+                BooleanProperty observable = new SimpleBooleanProperty();
+
+                for (Workspace workspace : workspaces) {
+                    if(workspace.getName().equals(pickWorkspace.getValue())) {
+                        activities = workspaces.get(workspaces.indexOf(workspace)).getActivities();
+                        break;
+                    }
+                }
+
+                observable.addListener((obs, wasSelected, isNowSelected) -> {
+                    System.out.println("Check box for "+item+" changed from "+wasSelected+" to "+isNowSelected);
+
+                }                   
+                );
+                return observable ;
+            }
+        }));
     }
 
     public void loadListView() {
@@ -94,12 +124,6 @@ public class FXMLAssignActivityController {
     @FXML public void selectedWorkspace(ActionEvent event) {
         loadListView();
         // da finire vista activity user
-        for (Workspace workspace : workspaces) {
-            if(workspace.getName().equals(pickWorkspace.getValue())) {
-                activities = workspaces.get(workspaces.indexOf(workspace)).getActivities();
-                break;
-            }
-        }
     }
     
 }

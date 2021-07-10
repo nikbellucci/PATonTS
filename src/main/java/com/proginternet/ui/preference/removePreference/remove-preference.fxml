@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proginternet.ui.preference.removePreference.FXMLRemovePreferenceController">
+	<children>
+		<Pane prefHeight="139.0" prefWidth="944.0" style="-fx-background-color: #2D75E8;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		  <children>
+					<Label layoutX="550.0" layoutY="40.0" text="PaTonTs" textFill="WHITE">
+					   <font>
+						  <Font size="48.0" />
+					   </font>
+					</Label>
+            <Button fx:id="backButton" alignment="CENTER" layoutX="20.0" layoutY="90.0" mnemonicParsing="false" onAction="#showWorkspace" prefHeight="34.0" prefWidth="123.0" text="Indietro" />
+		  </children>
+		</Pane>
+      <Pane layoutY="139.0" prefHeight="582.0" prefWidth="1280.0">
+         <children>
+            <ListView fx:id="activityList" layoutX="1.0" onMouseClicked="#handleMouseClick" prefHeight="582.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <Button fx:id="removeButton" layoutX="455.0" layoutY="542.0" mnemonicParsing="false" onAction="#remove" prefHeight="26.0" prefWidth="370.0" text="Rimuovi workspace selezionato" />
+            <Text fx:id="removeMsg" layoutX="455.0" layoutY="532.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="370.0" />
+            <ChoiceBox fx:id="pickWorkspace" layoutX="1085.0" layoutY="14.0" prefHeight="26.0" prefWidth="181.0" onAction="#selectedWorkspace" />
+         </children>
+      </Pane>
+	 </children>
+</AnchorPane>

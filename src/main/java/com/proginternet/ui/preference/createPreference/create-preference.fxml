@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proginternet.ui.preference.createPreference.FXMLCreatePreferenceController">
+	<children>
+		<Pane prefHeight="139.0" prefWidth="944.0" style="-fx-background-color: #2D75E8;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		  <children>
+					<Label layoutX="479.0" layoutY="40.0" text="Crea preferenza" textFill="WHITE">
+					   <font>
+						  <Font size="48.0" />
+					   </font>
+					</Label>
+		  </children>
+		</Pane>
+	   <Pane layoutX="38.0" layoutY="156.0" prefHeight="532.0" prefWidth="1204.0">
+		  <children>
+			 <Button fx:id="createButton" alignment="CENTER" layoutX="541.0" layoutY="367.0" mnemonicParsing="false" onAction="#create" prefHeight="34.0" prefWidth="123.0" text="Crea preferenza" />
+            <TextField fx:id="nameField" layoutX="272.0" layoutY="240.0" prefHeight="26.0" prefWidth="242.0" />
+            <Label layoutX="538.0" layoutY="54.0" text="Descrizione">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="213.0" layoutY="240.0" text="Nome">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="backButton" alignment="CENTER" layoutX="25.0" layoutY="20.0" mnemonicParsing="false" onAction="#showWorkspace" prefHeight="34.0" prefWidth="123.0" text="Indietro" />
+            <TextArea fx:id="descriptionField" layoutX="538.0" layoutY="99.0" prefHeight="200.0" prefWidth="568.0" />
+            <Text fx:id="creationMsg" layoutX="210.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="228.0" />
+            <ChoiceBox fx:id="pickActivity" layoutX="213.0" layoutY="173.0" prefHeight="26.0" prefWidth="300.0" />
+            <ChoiceBox fx:id="pickWorkspace" layoutX="213.0" layoutY="115.0" prefHeight="26.0" prefWidth="300.0" onAction="#selectedWorkspace" />
+		  </children>
+	   </Pane>
+	 </children>
+</AnchorPane>

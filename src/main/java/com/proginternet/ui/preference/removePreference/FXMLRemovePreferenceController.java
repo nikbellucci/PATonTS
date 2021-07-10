@@ -1,4 +1,4 @@
-package com.proginternet.ui.activity.removeActivity;
+package com.proginternet.ui.preference.removePreference;
 
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FXMLRemoveActivityController {
+public class FXMLRemovePreferenceController {
 
     @FXML private Text removeMsg;
     @FXML private ListView<String> activityList;
@@ -36,7 +36,7 @@ public class FXMLRemoveActivityController {
     private ObservableList<String> observableList = FXCollections.observableArrayList();
 
     @FXML public void initialize() {
-        loadChoiceBox();
+        loadCheckBox();
         removeButton.setDisable(true);
     }
 
@@ -65,7 +65,7 @@ public class FXMLRemoveActivityController {
         stage.show();
     }
 
-    private void loadChoiceBox(){
+    private void loadCheckBox(){
         String filename = "data/Workspace.json";
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
         workspaces = parser.readOnJson(filename, Workspace[].class);

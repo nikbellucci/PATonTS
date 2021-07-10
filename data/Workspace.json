@@ -16,7 +16,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "2",
@@ -24,7 +25,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "3",
@@ -32,7 +34,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       }
     ]
   },
@@ -53,7 +56,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "5",
@@ -61,7 +65,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "6",
@@ -73,12 +78,7 @@
         "preferencies": [
           {
             "name": "orario",
-            "description": "orario frequenza",
-            "valueSelection": [
-              "5:00",
-              "6:00",
-              "7:00"
-            ]
+            "description": "orario frequenza"
           }
         ]
       }
@@ -101,7 +101,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "8",
@@ -109,7 +110,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "9",
@@ -117,7 +119,39 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
+      }
+    ]
+  },
+  {
+    "id": "werw",
+    "name": "werwer",
+    "description": "wrwrwre",
+    "category": "werwer",
+    "expiration": {
+      "year": 2021,
+      "month": 7,
+      "day": 25
+    },
+    "activities": [
+      {
+        "id": "werwer",
+        "name": "werwer",
+        "description": "werwerwer",
+        "where": "werwer",
+        "when": "",
+        "availableSeats": 0,
+        "preferencies": [
+          {
+            "name": "werwerwer",
+            "description": ""
+          },
+          {
+            "name": "werwerwer",
+            "description": "werwerwr"
+          }
+        ]
       }
     ]
   }

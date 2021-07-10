@@ -1,5 +1,8 @@
 package com.proginternet.models;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 public class Association {
 
 //     oggetto associazione
@@ -20,6 +23,20 @@ public class Association {
         this.user = user;
         this.workspaceId = workspaceId;
         this.activityId = activityId;
+        this.preferenceId = "";
+        this.preferenceAnswer = "";
+    }
+
+    public Association(String user, String workspaceId, String activityId, String preferenceId, String preferenceAnswer) {
+        this.user = user;
+        this.workspaceId = workspaceId;
+        this.activityId = activityId;
+        this.preferenceId = preferenceId;
+        this.preferenceAnswer = preferenceAnswer;
+    }
+
+    public String getActivityId() {
+        return this.activityId;
     }
     
 }
