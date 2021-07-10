@@ -14,4 +14,7 @@ public class Preference {
         this.description = description;
     }
     
+    public String getName() {
+        return name;
+    }
 }

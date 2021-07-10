@@ -45,16 +45,14 @@ public class FXMLCreatePreferenceController {
         for (Workspace workspace : workspaces) {
             if(workspace.getName().equals(pickWorkspace.getValue())) {
                 activities = workspaces.get(workspaces.indexOf(workspace)).getActivities();
+                for (Activity activity : activities) {
+                    if (activity.getName().equals(pickActivity.getValue())) {
+                        preferencies = activities.get(activities.indexOf(activity)).getPreference();
+                        break;
+                    }
+                }
                 break;
             }
-
-            for (Activity activity : activities) {
-                if (activity.getName().equals(pickActivity.getValue())) {
-                    preferencies = activities.get(activities.indexOf(activity)).getPreference();
-                }
-            }
-
-
         }
         
         preferencies.add(new Preference(nameField.getText(), descriptionField.getText()));
