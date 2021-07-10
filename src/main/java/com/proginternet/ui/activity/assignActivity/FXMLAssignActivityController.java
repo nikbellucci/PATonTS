@@ -4,14 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.proginternet.models.Activity;
+import com.proginternet.models.Association;
 import com.proginternet.models.User;
 import com.proginternet.models.Workspace;
 import com.proginternet.utils.JsonParser;
-import com.sun.prism.paint.Color;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,13 +19,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.CornerRadii;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.scene.paint.Paint;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+
 
 public class FXMLAssignActivityController {
     
@@ -40,50 +40,57 @@ public class FXMLAssignActivityController {
     private ArrayList<Activity> activities;
     private ArrayList<Workspace> workspaces;
     private ArrayList<User> users;
+    private ArrayList<Association> associations;
     private ObservableList<String> observableList = FXCollections.observableArrayList();
 
     @FXML public void initialize() {
-        loadUser();
         loadCheckBox();
     }
 
-    private void loadUser(){
-        JsonParser<User> parser = new JsonParser<User>();
-        this.users = parser.readOnJson("data/Users.json", User[].class);
-        ArrayList<String> names = new ArrayList<String>();
+    private void associationColor() {
+        JsonParser<Association> parser = new JsonParser<Association>();
+        this.associations = parser.readOnJson("data/Associations.json", Association[].class);
 
-        for (User user : users) {
-            names.add(user.getUsername());
+        for (Activity activity : activities) {
+            
+            for (Association association : associations) {
+                if (association.getActivityId().equals(activityList.getSelectionModel().getSelectedItem())) {
+                    // userList.setCellFactory(new Callback<ListView<String>,ListCell<String>>(){
+                        //     @Override
+                        //     public ListCell<String> call(ListView<String> param) {
+                        //         return new ListCell<String>() {
+                        //             @Override
+                        //             protected void updateItem(String item, boolean empty) {
+                        //                 super.updateItem(item, empty);
+                        //                 setText(item);
+                        //                 // Fill the "done" cell with color -> "#58FF2D" = light green
+                        //                 setBackground(new Background(new BackgroundFill(Paint.valueOf("#58FF2D"), CornerRadii.EMPTY, Insets.EMPTY)));
+                        //             }
+                        //         };
+                        //     }
+                        // });
+                }
+            }
         }
 
-        observableList.removeAll(observableList);
-        observableList.addAll(names);
-        userList.getItems().addAll(observableList);
+    }
 
-        userList.setCellFactory(CheckBoxListCell.forListView(new Callback<String,ObservableValue<Boolean>>(){
-            public ObservableValue<Boolean> call(String item) {
-                BooleanProperty observable = new SimpleBooleanProperty();
+    private void loadUser(){
+        userList.getItems().remove(0, userList.getItems().size());
+        JsonParser<User> parser = new JsonParser<User>();
+        this.users = parser.readOnJson("data/Users.json", User[].class);
+        
+        for (User user : users) {
+            userList.getItems().add(user.getUsername());
+        }
 
-                for (Workspace workspace : workspaces) {
-                    if(workspace.getName().equals(pickWorkspace.getValue())) {
-                        activities = workspaces.get(workspaces.indexOf(workspace)).getActivities();
-                        break;
-                    }
-                }
-
-                observable.addListener((obs, wasSelected, isNowSelected) -> {
-                    System.out.println("Check box for "+item+" changed from "+wasSelected+" to "+isNowSelected);
-
-                }                   
-                );
-                return observable ;
-            }
-        }));
+        // observableList.removeAll(observableList);
+        // observableList.addAll(names);
+        // userList.getItems().addAll(observableList);
     }
 
     public void loadListView() {
         activityList.getItems().remove(0, activityList.getItems().size());
-        activities = null;
         
         for (Workspace workspace : workspaces) {
             if(workspace.getName().equals(pickWorkspace.getValue())) {
@@ -91,16 +98,14 @@ public class FXMLAssignActivityController {
                 break;
             }
         }
-
-        ArrayList<String> names = new ArrayList<String>();
         
         for (Activity activity : activities) {
-            names.add(activity.getName());
+            activityList.getItems().add(activity.getName());
         }
 
-        observableList.removeAll(observableList);
-        observableList.addAll(names);
-        activityList.getItems().addAll(observableList);
+        // observableList.removeAll(observableList);
+        // observableList.addAll(names);
+        // activityList.getItems().addAll(observableList);
     }
 
     private void loadCheckBox(){
@@ -123,7 +128,18 @@ public class FXMLAssignActivityController {
 
     @FXML public void selectedWorkspace(ActionEvent event) {
         loadListView();
+        loadUser();
         // da finire vista activity user
+    }
+
+    @FXML public void handleMouseClick(MouseEvent event) {
+        associationColor();
     }
     
 }
+
+
+
+
+
+// 

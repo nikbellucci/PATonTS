@@ -38,5 +38,21 @@ public class Association {
     public String getActivityId() {
         return this.activityId;
     }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPreferenceId() {
+        return preferenceId;
+    }
+
+    public String getPreferenceAnswer() {
+        return preferenceAnswer;
+    }
+
+    public String getWorkspaceId() {
+        return workspaceId;
+    }
     
 }

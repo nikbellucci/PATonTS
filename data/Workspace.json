@@ -36,6 +36,14 @@
         "when": "test",
         "availableSeats": 5,
         "preferencies": []
+      },
+      {
+        "id": "534",
+        "name": "rwerwe",
+        "description": "rwerwer",
+        "where": "rwerwer",
+        "availableSeats": 0,
+        "preferencies": []
       }
     ]
   },
