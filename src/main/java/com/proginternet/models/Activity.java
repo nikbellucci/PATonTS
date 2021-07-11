@@ -32,6 +32,20 @@ public class Activity {
     public String getName(){
         return this.name;
     }
+    public String getWhere(){
+        return this.where;
+    }
+    public String getWhen(){
+        return this.when;
+    }
+
+    public String getDescrizione(){
+        return this.description;
+    }
+
+    public ArrayList<Preference> getPref(){
+        return this.preferencies;
+    }
 
     public void addPref(Preference p){
         preferencies.add(p);

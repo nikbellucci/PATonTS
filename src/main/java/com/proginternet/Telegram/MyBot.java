@@ -15,6 +15,7 @@ import com.proginternet.models.Activity;
 import com.proginternet.models.Preference;
 import com.proginternet.models.User;
 import com.proginternet.models.Workspace;
+import com.proginternet.models.Association;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -179,6 +180,11 @@ public class MyBot extends TelegramLongPollingBot {
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
+                case "VWCH":
+                    ViewWS(update.
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
                 case "add":
                     Creazione(update.getCallbackQuery().getMessage());
                     deletePrevMessage(update.getCallbackQuery().getMessage());
@@ -234,8 +240,28 @@ public class MyBot extends TelegramLongPollingBot {
                     break;
                 default:
                     if (cbdata.startsWith("WS")) {
-                        WSDetails(update.getCallbackQuery().getMessage(), selectedObject(cbdata.substring(2)));
-                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                        Workspace w=selectedObject(cbdata.substring(2));
+                        if(w!=null){
+                            WSDetails(update.getCallbackQuery().getMessage(), w);
+                            deletePrevMessage(update.getCallbackQuery().getMessage());
+                        }
+                        else errore(update.getCallbackQuery().getMessage());
+                    }
+                    if (cbdata.startsWith("ACT")) {
+                        Activity a=selectedActivity(actWSid, cbdata.substring(3));
+                        if(a!=null){
+                            ACTDetails(update.getCallbackQuery().getMessage(), a);
+                            deletePrevMessage(update.getCallbackQuery().getMessage());
+                        }
+                        else errore(update.getCallbackQuery().getMessage());
+                    }
+                    if (cbdata.startsWith("PREF")) {
+                        Preference p=selectedPref(actWSid, prefACTid, cbdata.substring(4));
+                        if(p!=null){
+                            PREFDetails(update.getCallbackQuery().getMessage(), p);
+                            deletePrevMessage(update.getCallbackQuery().getMessage());
+                        }
+                        else errore(update.getCallbackQuery().getMessage());
                     }
                     if (cbdata.startsWith("ADD")) {
                         us.addWS(cbdata.substring(3));
@@ -263,7 +289,7 @@ public class MyBot extends TelegramLongPollingBot {
                         prefACTid=cbdata.substring(4);
                         pref=new Preference();
                         value=new ArrayList<String>();
-                        addPrefe(update.getCallbackQuery().getMessage(), "name");
+                        addPrefe(update.getCallbackQuery().getMessage(), "id");
                         deletePrevMessage(update.getCallbackQuery().getMessage());
                     }
                     break;
@@ -276,7 +302,8 @@ public class MyBot extends TelegramLongPollingBot {
 
     //menu -----------------------------------------------------------------------------------------------------
     public void PreLoginMenu(Message mess){
-        
+        actWSid="";
+        prefACTid="";
         long temp=mess.getChatId();
         us=alreadyLogged(temp);
         
@@ -342,7 +369,7 @@ public class MyBot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         rowInline.add(new InlineKeyboardButton().setText("Creazione/Aggiunta").setCallbackData("add"));
-        rowInline.add(new InlineKeyboardButton().setText("Modifica/Rimozione").setCallbackData("changes"));
+        rowInline.add(new InlineKeyboardButton().setText("Rimozione").setCallbackData("changes"));
         List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
         rowInline2.add(new InlineKeyboardButton().setText("Main Menu").setCallbackData("mainmenu"));
         // Set the keyboard to the markup
@@ -516,6 +543,7 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
     public void WSDetails(Message mess, Workspace ws){
+        actWSid=ws.getId();
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(mess.getChatId())
             .setText("Informazioni relative al workspace: "+ ws.getName()+
@@ -528,7 +556,7 @@ public class MyBot extends TelegramLongPollingBot {
         ArrayList<Activity> act = ws.getActivities();
         if(!(act==null||act.isEmpty())){
             for (int i = 0; i < act.size(); i++) {
-                rowInline.add(new InlineKeyboardButton().setText(act.get(i).getName()).setCallbackData("ACT" +  act.get(i).getName()));
+                rowInline.add(new InlineKeyboardButton().setText("Activity "+(i+1)+": "+act.get(i).getName()).setCallbackData("ACT" +  act.get(i).getId()));
             }
             rowsInline.add(rowInline);
         }
@@ -544,6 +572,94 @@ public class MyBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
+    public void ACTDetails(Message mess, Activity act){
+        prefACTid=act.getId();
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Informazioni relative all'attività: "+ act.getName()+
+                     "\nDescrizione: "+ act.getDescrizione()+
+                     "\nSi svolgerà il: "+ act.getWhen()+
+                     ",\nnei pressi di : "+ act.getWhere());
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        ArrayList<Preference> pref = act.getPref();
+        if(!(pref==null||pref.isEmpty())){
+            for (int i = 0; i < pref.size(); i++) {
+                rowInline.add(new InlineKeyboardButton().setText("Preferenza "+(i+1)+": "+pref.get(i).getName()).setCallbackData("PREF" +  pref.get(i).getId()));
+            }
+            rowsInline.add(rowInline);
+        }
+        rowInline2.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline2);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void PREFDetails(Message mess, Preference pre){
+        pref=pre;
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Informazioni relative alla preferenza: "+ pre.getName()+
+                     "\nDescrizione: "+ pre.getDescrizione());
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        rowInline.add(new InlineKeyboardButton().setText("Visualizza scelta").setCallbackData("VWCH"));
+        rowInline.add(new InlineKeyboardButton().setText("Modifica scelta").setCallbackData("CHPR"));
+        rowsInline.add(rowInline);
+        rowInline2.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline2);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void viewChoice(Message mess){
+        String s=prefChoice(actWSid, prefACTid);
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("La preferenza da lei inserita è: \n"+s);
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        if(s==null){
+            message.setText("Non hai inserito alcuna preferenza!!");
+            List<InlineKeyboardButton> rowInline = new ArrayList<>();
+            rowInline.add(new InlineKeyboardButton().setText("Inserisci la tua preferenza").setCallbackData("CHPR"));
+            rowsInline.add(rowInline);
+            
+        }
+        
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        rowInline2.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        // Set the keyboard to the markup
+        
+        rowsInline.add(rowInline2);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     //Aggiunta Workspace
     public void addWS(Message mess){
@@ -743,6 +859,43 @@ public class MyBot extends TelegramLongPollingBot {
                 for (Activity a : works.getActivities()) {
                     if (a.getId().equals(idACT)) {
                         result=a;
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public String prefChoice(String idWS, String idACT){
+        String filename = "data/Preference.json";
+
+        JsonParser<Association> parser = new JsonParser<Association>();
+        ArrayList<Association> as = parser.readOnJson(filename, Association[].class);
+        for (Association a : as) {
+            if (a.getUser().equals(us.getUsername())&&a.getWorkspaceId().equals(idWS)&&a.getActivityId().equals(idACT)&&a.getPrefId().equals(pref.getId())) {
+                return a.getAnswer();
+            }
+        }
+        return null;
+    }
+
+
+
+    public Preference selectedPref(String idWS, String idACT, String idPref){
+        String filename = "data/Workspace.json";
+
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> ws = parser.readOnJson(filename, Workspace[].class);
+        Preference result = new Preference();
+        for (Workspace works : ws) {
+            if (works.getId().equals(idWS)) {
+                for (Activity a : works.getActivities()) {
+                    if (a.getId().equals(idACT)) {
+                        for (Preference p : a.getPref()) {
+                            if (p.getId().equals(idPref)) {
+                                result=p;
+                            }
+                        }
                         break;
                     }
                 }

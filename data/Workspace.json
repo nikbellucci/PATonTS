@@ -16,15 +16,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
-      },
-      {
-        "id": "2",
-        "name": "test2",
-        "description": "test",
-        "where": "test",
-        "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "3",
@@ -32,7 +25,23 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
+      },
+      {
+        "id": "2",
+        "name": "test2",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5,
+        "preferencies": [
+          {
+            "id": "12",
+            "name": "pippo",
+            "description": "pippo"
+          }
+        ]
       }
     ]
   },
@@ -53,7 +62,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "5",
@@ -61,7 +71,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "6",
@@ -72,13 +83,9 @@
         "availableSeats": 5,
         "preferencies": [
           {
+            "id": "1",
             "name": "orario",
-            "description": "orario frequenza",
-            "valueSelection": [
-              "5:00",
-              "6:00",
-              "7:00"
-            ]
+            "description": "orario frequenza"
           }
         ]
       }
@@ -101,7 +108,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "8",
@@ -109,7 +117,8 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
       },
       {
         "id": "9",
@@ -117,8 +126,30 @@
         "description": "test",
         "where": "test",
         "when": "test",
-        "availableSeats": 5
+        "availableSeats": 5,
+        "preferencies": []
+      },
+      {
+        "id": "12",
+        "name": "a",
+        "description": "a",
+        "where": "a",
+        "when": "a",
+        "availableSeats": 3,
+        "preferencies": []
       }
     ]
+  },
+  {
+    "id": "1222",
+    "name": "p",
+    "description": "p",
+    "category": "p",
+    "expiration": {
+      "year": 2000,
+      "month": 1,
+      "day": 1
+    },
+    "activities": []
   }
 ]

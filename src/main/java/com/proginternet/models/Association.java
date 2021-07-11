@@ -21,5 +21,12 @@ public class Association {
         this.workspaceId = workspaceId;
         this.activityId = activityId;
     }
+
+    public Association(){}
     
+    public String getUser(){ return user;}
+    public String getActivityId(){ return activityId;}
+    public String getWorkspaceId(){ return workspaceId;}
+    public String getPrefId(){ return preferenceId;}
+    public String getAnswer(){ return preferenceAnswer;}
 }
