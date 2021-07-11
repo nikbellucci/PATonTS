@@ -50,6 +50,13 @@
                         <MenuItem mnemonicParsing="false" onAction="#assignActivity" text="Assegna attività" />
                      </items>
                   </Menu>
+                  <Menu fx:id="preferenceMenu" mnemonicParsing="false" text="Preferenze">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#createPreference" text="Crea preferenza" />
+                        <MenuItem mnemonicParsing="false" onAction="#removePreference" text="Elimina preferenza" />
+                        <MenuItem mnemonicParsing="false" onAction="#addAnswerPreference" text="Aggiungi la tua preferenza" />
+                     </items>
+                  </Menu>
                   <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
                      <items>
                          <MenuItem mnemonicParsing="false" onAction="#importFile" text="Importa file" />

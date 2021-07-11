@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proginternet.ui.activity.assignActivity.FXMLAssignActivityController">
 	<children>
@@ -19,21 +20,29 @@
 					   </font>
 					</Label>
             <Button fx:id="backButton" alignment="CENTER" layoutX="14.0" layoutY="91.0" mnemonicParsing="false" onAction="#showWorkspace" prefHeight="34.0" prefWidth="123.0" text="Indietro" />
+            <Text fill="WHITE" layoutX="263.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Attività">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="937.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Utenti">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
 		  </children>
 		</Pane>
-      <SplitPane dividerPositions="0.3" layoutY="139.0" prefHeight="582.0" prefWidth="1280.0">
+      <SplitPane dividerPositions="0.5" layoutY="139.0" prefHeight="582.0" prefWidth="1280.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <ListView fx:id="activityList" prefHeight="582.0" prefWidth="446.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <ChoiceBox fx:id="pickWorkspace" layoutX="59.0" layoutY="540.0" prefHeight="26.0" prefWidth="263.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="58.0" onAction="#selectedWorkspace" />
+                  <ListView fx:id="activityList" prefHeight="582.0" prefWidth="446.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" onMouseClicked="#handleMouseClick" />
+                  <ChoiceBox fx:id="pickWorkspace" layoutX="59.0" layoutY="540.0" onAction="#selectedWorkspace" prefHeight="26.0" prefWidth="263.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="58.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="580.0" prefWidth="797.0">
                <children>
                   <ListView fx:id="userList" prefHeight="580.0" prefWidth="821.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <Button fx:id="assignButton" layoutX="14.0" layoutY="541.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="140.0" text="Assegna" AnchorPane.leftAnchor="14.0" />
-                  <Button fx:id="removeButton" layoutX="174.0" layoutY="541.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="140.0" text="Rimuovi" AnchorPane.leftAnchor="174.0" />
                </children>
             </AnchorPane>
         </items>

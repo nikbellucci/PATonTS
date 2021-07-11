@@ -1,10 +1,11 @@
-package com.proginternet.ui.activity.removeActivity;
+package com.proginternet.ui.preference.removePreference;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import com.proginternet.models.Activity;
+import com.proginternet.models.Preference;
 import com.proginternet.models.Workspace;
 import com.proginternet.utils.JsonParser;
 
@@ -23,20 +24,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FXMLRemoveActivityController {
+public class FXMLRemovePreferenceController {
 
     @FXML private Text removeMsg;
-    @FXML private ListView<String> activityList;
+    @FXML private ListView<String> preferenceList;
     @FXML private Button removeButton;
     @FXML private ChoiceBox<String> pickWorkspace;
+    @FXML private ChoiceBox<String> pickActivity;
     @FXML private Button backButton;
 
     private ArrayList<Workspace> workspaces;
     private ArrayList<Activity> activities;
+    private ArrayList<Preference> preferencies;
     private ObservableList<String> observableList = FXCollections.observableArrayList();
 
     @FXML public void initialize() {
-        loadChoiceBox();
+        loadWorkspace();
         removeButton.setDisable(true);
     }
 
@@ -44,10 +47,10 @@ public class FXMLRemoveActivityController {
         String filename = "data/Workspace.json";
 		JsonParser<Workspace> parser = new JsonParser<Workspace>();
 
-        for (int i = 0; i < activities.size(); i++) {
-            if (activityList.getSelectionModel().getSelectedItem().equals(activities.get(i).getName())) {
-                activities.remove(i);
-                activityList.getItems().remove(i);
+        for (int i = 0; i < preferencies.size(); i++) {
+            if (preferenceList.getSelectionModel().getSelectedItem().equals(preferencies.get(i).getName())) {
+                preferencies.remove(i);
+                preferenceList.getItems().remove(i);
                 parser.writeOnJson(filename, workspaces);
 		        removeMsg.setText("Cancellazione avvenuta con successo");
     	        removeMsg.setFill(Color.GREEN);
@@ -65,17 +68,45 @@ public class FXMLRemoveActivityController {
         stage.show();
     }
 
-    private void loadChoiceBox(){
+    public void loadWorkspace() {
         String filename = "data/Workspace.json";
-        JsonParser<Workspace> parser = new JsonParser<Workspace>();
-        workspaces = parser.readOnJson(filename, Workspace[].class);
+		JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        this.workspaces = parser.readOnJson(filename, Workspace[].class);
         for (Workspace workspace : workspaces) {
             pickWorkspace.getItems().add(workspace.getName());
         }
     }
 
     public void loadListView() {
-        activityList.getItems().remove(0, activityList.getItems().size());
+        preferenceList.getItems().remove(0, preferenceList.getItems().size());
+        preferencies = null;
+        
+        for (Workspace workspace : workspaces) {
+            if(workspace.getName().equals(pickWorkspace.getValue())) {
+                activities = workspaces.get(workspaces.indexOf(workspace)).getActivities();
+                for (Activity activity : activities) {
+                    if (activity.getName().equals(pickActivity.getValue())) {
+                        preferencies = activities.get(activities.indexOf(activity)).getPreference();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        ArrayList<String> names = new ArrayList<String>();
+
+        for (Preference preference : preferencies) {
+            names.add(preference.getName());
+        }
+
+        observableList.removeAll(observableList);
+        observableList.addAll(names);
+        preferenceList.getItems().addAll(observableList);
+    }
+
+    public void loadActivities() {
+        pickActivity.getItems().remove(0, pickActivity.getItems().size());
         activities = null;
         
         for (Workspace workspace : workspaces) {
@@ -84,20 +115,14 @@ public class FXMLRemoveActivityController {
                 break;
             }
         }
-
-        ArrayList<String> names = new ArrayList<String>();
         
         for (Activity activity : activities) {
-            names.add(activity.getName());
+            pickActivity.getItems().add(activity.getName());
         }
-
-        observableList.removeAll(observableList);
-        observableList.addAll(names);
-        activityList.getItems().addAll(observableList);
     }
 
-    @FXML public void selectedWorkspace(ActionEvent event) {
-        loadListView();
+    @FXML public void selectedWorkspace() {
+        loadActivities();
     }
 
     @FXML public void handleMouseClick(MouseEvent event) {

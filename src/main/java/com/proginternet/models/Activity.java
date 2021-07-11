@@ -27,6 +27,7 @@ public class Activity {
         this.name = name;
         this.description = description;
         this.where = where;
+        this.preferencies = new ArrayList<Preference>();
     }
 
     public String getName(){
@@ -49,6 +50,10 @@ public class Activity {
 
     public void addPref(Preference p){
         preferencies.add(p);
+    }
+
+    public ArrayList<Preference> getPreference() {
+        return this.preferencies;
     }
 
     public String getId(){

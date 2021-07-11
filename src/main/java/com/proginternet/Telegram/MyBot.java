@@ -147,6 +147,10 @@ public class MyBot extends TelegramLongPollingBot {
                     PreLoginMenu(update.getMessage());
                 }
                 else addPrefe(update.getMessage(), param);
+            }else if(state.startsWith("CHOICE")){
+                Association as = new Association(us.getUsername(), actWSid, prefACTid, pref.getId(), msg);
+                addAssociation(as);
+                PreLoginMenu(update.getMessage());
             }
 
             if (msg.equals("/start")) PreLoginMenu(update.getMessage());
@@ -181,7 +185,12 @@ public class MyBot extends TelegramLongPollingBot {
                     break;
 
                 case "VWCH":
-                    ViewWS(update.
+                    viewChoice(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "CHPR":
+                    userPreference(update.getCallbackQuery().getMessage());
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
@@ -302,8 +311,7 @@ public class MyBot extends TelegramLongPollingBot {
 
     //menu -----------------------------------------------------------------------------------------------------
     public void PreLoginMenu(Message mess){
-        actWSid="";
-        prefACTid="";
+        clean();
         long temp=mess.getChatId();
         us=alreadyLogged(temp);
         
@@ -660,6 +668,18 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+    public void userPreference(Message m){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(m.getChatId())
+            .setText("Inserire come preferisce svolgere l'attività:");
+
+        state="CHOICE";
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
     //Aggiunta Workspace
     public void addWS(Message mess){
@@ -872,14 +892,19 @@ public class MyBot extends TelegramLongPollingBot {
         JsonParser<Association> parser = new JsonParser<Association>();
         ArrayList<Association> as = parser.readOnJson(filename, Association[].class);
         for (Association a : as) {
-            if (a.getUser().equals(us.getUsername())&&a.getWorkspaceId().equals(idWS)&&a.getActivityId().equals(idACT)&&a.getPrefId().equals(pref.getId())) {
-                return a.getAnswer();
+            if (a.getUser().equals(us.getUsername())&&a.getWorkspaceId().equals(idWS)&&a.getActivityId().equals(idACT)&&a.getPreferenceId().equals(pref.getId())) {
+                return a.getPreferenceAnswer();
             }
         }
         return null;
     }
 
-
+    public void addAssociation(Association as){
+        JsonParser<Association> parser = new JsonParser<Association>();
+        ArrayList<Association> assoc = parser.readOnJson("data/Users.json", Association[].class);
+        assoc.add(as);
+        parser.writeOnJson("data/Users.json", assoc);
+    }
 
     public Preference selectedPref(String idWS, String idACT, String idPref){
         String filename = "data/Workspace.json";
@@ -1031,6 +1056,22 @@ public class MyBot extends TelegramLongPollingBot {
             }
         }
         parser.writeOnJson("data/Workspace.json", ws);
+    }
+
+    public void clean(){
+    newUs=null;
+    actWSid="";
+    prefACTid="";
+    usernameResp=false;
+    passwordResp=false;
+    phase=false;
+    act=null;
+    work=null;
+    pref=null;
+    user="";
+    tries=0;
+    state="";
+    value=new ArrayList<String>();
     }
 
     @Override
