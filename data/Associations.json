@@ -3,7 +3,14 @@
     "user": "test",
     "workspaceId": "1",
     "activityId": "test1",
-    "preferenceId": "",
-    "preferenceAnswer": ""
+    "preferenceId": "1",
+    "preferenceAnswer": "mimmo"
+  },
+  {
+    "user": "test",
+    "workspaceId": "2",
+    "activityId": "6",
+    "preferenceId": "1",
+    "preferenceAnswer": "5:00"
   }
 ]

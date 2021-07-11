@@ -191,7 +191,6 @@ public class MyBot extends TelegramLongPollingBot {
 
                 case "CHPR":
                     userPreference(update.getCallbackQuery().getMessage());
-                    deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
                 case "add":
@@ -406,11 +405,14 @@ public class MyBot extends TelegramLongPollingBot {
         rowInline.add(new InlineKeyboardButton().setText("WorkSpace").setCallbackData("newWs"));
         rowInline.add(new InlineKeyboardButton().setText("Attività").setCallbackData("newActivity"));
         List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline3 = new ArrayList<>();
         rowInline2.add(new InlineKeyboardButton().setText("Preferenza").setCallbackData("newPref"));
         rowInline2.add(new InlineKeyboardButton().setText("Utente").setCallbackData("newUser"));
+        rowInline3.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
         // Set the keyboard to the markup
         rowsInline.add(rowInline);
         rowsInline.add(rowInline2);
+        rowsInline.add(rowInline3);
         // Add it to the message
         markupInline.setKeyboard(rowsInline);
         message.setReplyMarkup(markupInline);
@@ -887,7 +889,7 @@ public class MyBot extends TelegramLongPollingBot {
         return result;
     }
     public String prefChoice(String idWS, String idACT){
-        String filename = "data/Preference.json";
+        String filename = "data/Associations.json";
 
         JsonParser<Association> parser = new JsonParser<Association>();
         ArrayList<Association> as = parser.readOnJson(filename, Association[].class);
@@ -901,9 +903,9 @@ public class MyBot extends TelegramLongPollingBot {
 
     public void addAssociation(Association as){
         JsonParser<Association> parser = new JsonParser<Association>();
-        ArrayList<Association> assoc = parser.readOnJson("data/Users.json", Association[].class);
+        ArrayList<Association> assoc = parser.readOnJson("data/Associations.json", Association[].class);
         assoc.add(as);
-        parser.writeOnJson("data/Users.json", assoc);
+        parser.writeOnJson("data/Associations.json", assoc);
     }
 
     public Preference selectedPref(String idWS, String idACT, String idPref){
@@ -1064,7 +1066,6 @@ public class MyBot extends TelegramLongPollingBot {
     prefACTid="";
     usernameResp=false;
     passwordResp=false;
-    phase=false;
     act=null;
     work=null;
     pref=null;
