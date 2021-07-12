@@ -3,11 +3,8 @@ package com.proginternet.Telegram;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.*;
-import java.util.Properties;
-import java.lang.Math;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import com.proginternet.utils.Auth;
 import com.proginternet.utils.JsonParser;
@@ -18,7 +15,6 @@ import com.proginternet.models.Workspace;
 import com.proginternet.models.Association;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -59,7 +55,7 @@ public class MyBot extends TelegramLongPollingBot {
                 try {
                     authenticationUsers(update.getMessage(), user);
                 } catch (Exception e) {
-                    errore(update.getMessage());
+                    errore(update.getMessage(), "Si è verificato un errore");
                 }
             }
             else if (usernameResp) {user=msg; loginUser(update.getMessage(), "inviare la password");}
@@ -69,7 +65,7 @@ public class MyBot extends TelegramLongPollingBot {
                 try {
                     param=setValueActivity(msg, state.substring(3), act, update.getMessage(),1);
                 } catch (IllegalAccessException e) {
-                    errore(update.getMessage());
+                    errore(update.getMessage(), "Si è verificato un errore");
                 }
                 if(param.isEmpty()) {
                     Workspace wos = selectedObject(actWSid);
@@ -91,7 +87,7 @@ public class MyBot extends TelegramLongPollingBot {
                 try {
                     param=setValueActivity(msg, state.substring(2), work, update.getMessage(),1);
                 } catch (IllegalAccessException e) {
-                    errore(update.getMessage());
+                    errore(update.getMessage(), "Si è verificato un errore");
                 }
                 if(param.isEmpty()) {
                     try {
@@ -109,7 +105,7 @@ public class MyBot extends TelegramLongPollingBot {
                 try {
                     param=setValueActivity(msg, state.substring(2), newUs, update.getMessage(), 2);
                 } catch (IllegalAccessException e) {
-                    errore(update.getMessage());
+                    errore(update.getMessage(), "Si è verificato un errore");
                 }
                 if(param.isEmpty()) {
                     try {
@@ -128,7 +124,7 @@ public class MyBot extends TelegramLongPollingBot {
                 try {
                     param=setValueActivity(msg, state.substring(4), pref, update.getMessage(), 0);
                 } catch (IllegalAccessException e) {
-                    errore(update.getMessage());
+                    errore(update.getMessage(), "Si è verificato un errore");
                 }
                 if(param.isEmpty()) {
                     Workspace wos = selectedObject(actWSid);
@@ -151,6 +147,9 @@ public class MyBot extends TelegramLongPollingBot {
                 Association as = new Association(us.getUsername(), actWSid, prefACTid, pref.getId(), msg);
                 addAssociation(as);
                 PreLoginMenu(update.getMessage());
+            }else if(state.equals("RUS")){
+                if(!cancUser(msg)){errore(update.getMessage(), "Utente non esistente");}
+                else PreLoginMenu(update.getCallbackQuery().getMessage());
             }
 
             if (msg.equals("/start")) PreLoginMenu(update.getMessage());
@@ -241,6 +240,31 @@ public class MyBot extends TelegramLongPollingBot {
                     deletePrevMessage(update.getCallbackQuery().getMessage());
                     break;
 
+                case "remove":
+                    Rimozione(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "remWs":
+                    selectWS(update.getCallbackQuery().getMessage(), "RWS");
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "remActivity":
+                    selectWS(update.getCallbackQuery().getMessage(), "RAC");
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "remPref":
+                    selectWS(update.getCallbackQuery().getMessage(), "RPF");
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
+                case "remUser":
+                    removeUS(update.getCallbackQuery().getMessage());
+                    deletePrevMessage(update.getCallbackQuery().getMessage());
+                    break;
+
                 case "mainmenu":
                     phase = true;
                     PreLoginMenu(update.getCallbackQuery().getMessage());
@@ -253,7 +277,7 @@ public class MyBot extends TelegramLongPollingBot {
                             WSDetails(update.getCallbackQuery().getMessage(), w);
                             deletePrevMessage(update.getCallbackQuery().getMessage());
                         }
-                        else errore(update.getCallbackQuery().getMessage());
+                        else errore(update.getMessage(), "Si è verificato un errore");
                     }
                     if (cbdata.startsWith("ACT")) {
                         Activity a=selectedActivity(actWSid, cbdata.substring(3));
@@ -261,7 +285,7 @@ public class MyBot extends TelegramLongPollingBot {
                             ACTDetails(update.getCallbackQuery().getMessage(), a);
                             deletePrevMessage(update.getCallbackQuery().getMessage());
                         }
-                        else errore(update.getCallbackQuery().getMessage());
+                        else errore(update.getMessage(), "Si è verificato un errore");
                     }
                     if (cbdata.startsWith("PREF")) {
                         Preference p=selectedPref(actWSid, prefACTid, cbdata.substring(4));
@@ -269,7 +293,7 @@ public class MyBot extends TelegramLongPollingBot {
                             PREFDetails(update.getCallbackQuery().getMessage(), p);
                             deletePrevMessage(update.getCallbackQuery().getMessage());
                         }
-                        else errore(update.getCallbackQuery().getMessage());
+                        else errore(update.getMessage(), "Si è verificato un errore");
                     }
                     if (cbdata.startsWith("ADD")) {
                         us.addWS(cbdata.substring(3));
@@ -282,6 +306,37 @@ public class MyBot extends TelegramLongPollingBot {
                         PreLoginMenu(update.getCallbackQuery().getMessage());
                         deletePrevMessage(update.getCallbackQuery().getMessage());
                     }
+                    if(cbdata.startsWith("RWS")){
+                        removeWS(update.getCallbackQuery().getMessage());
+                        PreLoginMenu(update.getCallbackQuery().getMessage());
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if(cbdata.startsWith("RAC")){
+                        actWSid=cbdata.substring(3);
+                        selectACT(update.getCallbackQuery().getMessage(), actWSid, "CAC");
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if(cbdata.startsWith("CAC")){
+                        prefACTid=cbdata.substring(3);
+                        removeACT(update.getCallbackQuery().getMessage());
+                        PreLoginMenu(update.getCallbackQuery().getMessage());
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if(cbdata.startsWith("RPF")){
+                        actWSid=cbdata.substring(3);
+                        selectACT(update.getCallbackQuery().getMessage(), actWSid, "CAC");
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if(cbdata.startsWith("CPF")){
+                        prefACTid=cbdata.substring(3);
+                        selectPref(update.getCallbackQuery().getMessage(), actWSid, prefACTid);
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
+                    if(cbdata.startsWith("RPRE")){
+                        removePref(update.getCallbackQuery().getMessage(), cbdata.substring(4));
+                        PreLoginMenu(update.getCallbackQuery().getMessage());   
+                        deletePrevMessage(update.getCallbackQuery().getMessage());
+                    }
                     if (cbdata.startsWith("THIS")) {
                         actWSid=cbdata.substring(4);
                         act=new Activity();
@@ -290,7 +345,7 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                     if (cbdata.startsWith("THAT")) {
                         actWSid=cbdata.substring(4);
-                        selectACT(update.getCallbackQuery().getMessage(), actWSid);
+                        selectACT(update.getCallbackQuery().getMessage(), actWSid, "THUT");
                         deletePrevMessage(update.getCallbackQuery().getMessage());
                     }
                     if (cbdata.startsWith("THUT")) {
@@ -376,7 +431,7 @@ public class MyBot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         rowInline.add(new InlineKeyboardButton().setText("Creazione/Aggiunta").setCallbackData("add"));
-        rowInline.add(new InlineKeyboardButton().setText("Rimozione").setCallbackData("changes"));
+        rowInline.add(new InlineKeyboardButton().setText("Rimozione").setCallbackData("remove"));
         List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
         rowInline2.add(new InlineKeyboardButton().setText("Main Menu").setCallbackData("mainmenu"));
         // Set the keyboard to the markup
@@ -437,21 +492,23 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
-
     public void selectWS(Message mess, String selector){
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(mess.getChatId())
-            .setText("A quale workspace vuoi aggiungere l'attività?");
+            .setText("Seleziona il workspace.");
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
         ArrayList<Workspace> ws = parser.readOnJson("data/Workspace.json", Workspace[].class);
         for (int i = 0; i < ws.size(); i++) {
             rowInline.add(new InlineKeyboardButton().setText(ws.get(i).getName()).setCallbackData(selector +  ws.get(i).getId()));
         }
+        rowInline2.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
         // Set the keyboard to the markup
         rowsInline.add(rowInline);
+        rowsInline.add(rowInline2);
         // Add it to the message
         markupInline.setKeyboard(rowsInline);
         message.setReplyMarkup(markupInline);
@@ -462,20 +519,50 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
-    public void selectACT(Message mess, String id){
+    public void selectACT(Message mess, String id, String selector){
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(mess.getChatId())
-            .setText("A quale workspace vuoi aggiungere l'attività?");
+            .setText("Seleziona l'attività");
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
         ArrayList<Activity> acti=selectedObject(id).getActivities();
 
         for (int i = 0; i < acti.size(); i++) {
-            rowInline.add(new InlineKeyboardButton().setText(acti.get(i).getName()).setCallbackData("THUT" +  acti.get(i).getId()));
+            rowInline.add(new InlineKeyboardButton().setText(acti.get(i).getName()).setCallbackData(selector +  acti.get(i).getId()));
         }
+        rowInline2.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
         // Set the keyboard to the markup
         rowsInline.add(rowInline);
+        rowsInline.add(rowInline2);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void selectPref(Message mess, String idws, String idac){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Seleziona preferenza");
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        ArrayList<Preference> pre=selectedActivity(idws, idac).getPref();
+
+        for (int i = 0; i < pre.size(); i++) {
+            rowInline.add(new InlineKeyboardButton().setText(pre.get(i).getName()).setCallbackData("RPRE" +  pre.get(i).getId()));
+        }
+        rowInline2.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline);
+        rowsInline.add(rowInline2);
         // Add it to the message
         markupInline.setKeyboard(rowsInline);
         message.setReplyMarkup(markupInline);
@@ -511,7 +598,6 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
-
     public void addUser(Message mess, String param){
         
         SendMessage message = new SendMessage() // Create a message object object
@@ -527,6 +613,95 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+
+    //Rimozione elementi
+
+    public void Rimozione(Message mess){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Cosa vuoi rimovuere?");
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        rowInline.add(new InlineKeyboardButton().setText("WorkSpace").setCallbackData("remWs"));
+        rowInline.add(new InlineKeyboardButton().setText("Attività").setCallbackData("remActivity"));
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline3 = new ArrayList<>();
+        rowInline2.add(new InlineKeyboardButton().setText("Preferenza").setCallbackData("remPref"));
+        rowInline2.add(new InlineKeyboardButton().setText("Utente").setCallbackData("remUser"));
+        rowInline3.add(new InlineKeyboardButton().setText("Torna al menu").setCallbackData("menu"));
+        // Set the keyboard to the markup
+        rowsInline.add(rowInline);
+        rowsInline.add(rowInline2);
+        rowsInline.add(rowInline3);
+        // Add it to the message
+        markupInline.setKeyboard(rowsInline);
+        message.setReplyMarkup(markupInline);
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeWS(Message mess){
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> works = parser.readOnJson("data/Workspace.json", Workspace[].class);
+
+        for (int i = 0; i < works.size(); i++) {
+            if(works.get(i).getId().equals(actWSid)) {works.remove(i); break;}
+        }
+        parser.writeOnJson("data/Workspace.json", works);
+    }
+
+    public void removeACT(Message mess){
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> works = parser.readOnJson("data/Workspace.json", Workspace[].class);
+
+        for (int i = 0; i < works.size(); i++) {
+            if(works.get(i).getId().equals(actWSid)) {
+                for (int j = 0; j < works.get(i).getActivities().size(); j++) {
+                    if(works.get(i).getActivities().get(i).getId().equals(prefACTid)) {
+                        works.get(i).getActivities().remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+        parser.writeOnJson("data/Workspace.json", works);
+    }
+
+    public void removePref(Message mess, String idPref){
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        ArrayList<Workspace> works = parser.readOnJson("data/Workspace.json", Workspace[].class);
+
+        for (int i = 0; i < works.size(); i++) {
+            if(works.get(i).getId().equals(actWSid)) {
+                for (int j = 0; j < works.get(i).getActivities().size(); j++) {
+                    if(works.get(i).getActivities().get(j).getId().equals(prefACTid)) {
+                        for (int j2 = 0; j2 < works.get(i).getActivities().get(j).getPref().size(); j2++) {
+                            if(works.get(i).getActivities().get(j).getPref().get(j2).getId().equals(idPref)){
+                                works.get(i).getActivities().get(j).getPref().remove(j2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        parser.writeOnJson("data/Workspace.json", works);
+    }
+
+    public void removeUS(Message mess){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(mess.getChatId())
+            .setText("Inserire l'username dell'utente da rimuovere");
+        state="RUS";
+        try { // Sending our message object to user
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
     //Visualizzazione workspace
     public void ViewWS(Message mess){
         SendMessage message = new SendMessage() // Create a message object object
@@ -582,6 +757,7 @@ public class MyBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
+
     public void ACTDetails(Message mess, Activity act){
         prefACTid=act.getId();
         SendMessage message = new SendMessage() // Create a message object object
@@ -871,6 +1047,7 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
     public Activity selectedActivity(String idWS, String idACT){
+
         String filename = "data/Workspace.json";
 
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
@@ -888,6 +1065,7 @@ public class MyBot extends TelegramLongPollingBot {
         }
         return result;
     }
+
     public String prefChoice(String idWS, String idACT){
         String filename = "data/Associations.json";
 
@@ -1021,7 +1199,7 @@ public class MyBot extends TelegramLongPollingBot {
         return "";
     }
 
-    public void errore(Message mess){
+    public void errore(Message mess, String text){
         SendMessage sendMessage = new SendMessage();
                     sendMessage.setChatId(mess.getChatId());
                     sendMessage.setText("Si è verificato un errore");
@@ -1058,6 +1236,20 @@ public class MyBot extends TelegramLongPollingBot {
             }
         }
         parser.writeOnJson("data/Workspace.json", ws);
+    }
+
+    public boolean cancUser(String user){
+        JsonParser<User> parser = new JsonParser<User>();
+        ArrayList<User> users = parser.readOnJson("data/Users.json", User[].class);
+
+        for (int i = 0; i < users.size(); i++) {
+            if(users.get(i).getUsername().equals(user)){
+                users.remove(i);
+                parser.writeOnJson("data/Users.json", users);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void clean(){

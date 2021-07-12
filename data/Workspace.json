@@ -42,6 +42,7 @@
         "name": "rwerwe",
         "description": "rwerwer",
         "where": "rwerwer",
+        "when": "",
         "availableSeats": 0,
         "preferencies": []
       }
@@ -104,15 +105,6 @@
       "day": 8
     },
     "activities": [
-      {
-        "id": "7",
-        "name": "test7",
-        "description": "test",
-        "where": "test",
-        "when": "test",
-        "availableSeats": 5,
-        "preferencies": []
-      },
       {
         "id": "8",
         "name": "test8",

@@ -29,18 +29,5 @@
     "password": "",
     "isAdmin": false,
     "chatId": 0
-  },
-  {
-    "name": "pippo",
-    "surname": "pippo",
-    "email": "pippo.pippo@pippo.pippo",
-    "username": "pippo",
-    "password": "100:9d840f50219265fbc2b57a704bfd667d:1970da5a2dad79115e008a8c47ba485c3c67ffacbc8a48ec7ac3b01fe353c62f",
-    "birthday": {
-      "year": 2001,
-      "month": 12,
-      "day": 12
-    },
-    "isAdmin": true
   }
 ]
