@@ -42,6 +42,7 @@
         "name": "rwerwe",
         "description": "rwerwer",
         "where": "rwerwer",
+        "when": "",
         "availableSeats": 0,
         "preferencies": []
       }
@@ -154,17 +155,5 @@
         "preferencies": []
       }
     ]
-  },
-  {
-    "id": "1222",
-    "name": "p",
-    "description": "p",
-    "category": "p",
-    "expiration": {
-      "year": 2000,
-      "month": 1,
-      "day": 1
-    },
-    "activities": []
   }
 ]

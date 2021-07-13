@@ -216,6 +216,19 @@ public class FXMLWorkspaceController {
         }
     }
 
+    @FXML public void unsignActivity() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./../activity/unsignActivity/unsign-activity.fxml"));
+            Parent login = loader.load();
+            Scene loginScene = new Scene(login, 1280, 720);
+            Stage stage = (Stage) welcomeUser.getScene().getWindow();
+            stage.setScene(loginScene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML public void createPreference() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("./../preference/createPreference/create-preference.fxml"));
