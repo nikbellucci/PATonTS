@@ -97,7 +97,9 @@ public class FXMLRemoveActivityController {
     }
 
     @FXML public void selectedWorkspace(ActionEvent event) {
-        loadListView();
+        if (workspaces != null) {
+            loadListView();
+        }
     }
 
     @FXML public void handleMouseClick(MouseEvent event) {

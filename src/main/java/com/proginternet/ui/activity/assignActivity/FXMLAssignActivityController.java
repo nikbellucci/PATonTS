@@ -9,111 +9,71 @@ import com.proginternet.models.User;
 import com.proginternet.models.Workspace;
 import com.proginternet.utils.JsonParser;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.CornerRadii;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.scene.paint.Paint;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-
 
 public class FXMLAssignActivityController {
     
-    @FXML private ListView<String> userList;
     @FXML private Button backButton;
     @FXML private ChoiceBox<String> pickWorkspace;
-    @FXML private ListView<String> activityList;
+    // @FXML private ChoiceBox<String> pickActivity;
+    @FXML private ChoiceBox<String> pickUser;
 
     private ArrayList<Activity> activities;
     private ArrayList<Workspace> workspaces;
     private ArrayList<User> users;
     private ArrayList<Association> associations;
-    private ObservableList<String> observableList = FXCollections.observableArrayList();
 
     @FXML public void initialize() {
-        loadCheckBox();
+        loadUser();
+        loadWorkspace();
     }
 
-    private void associationColor() {
+    @FXML public void linkActivity() {
         JsonParser<Association> parser = new JsonParser<Association>();
-        this.associations = parser.readOnJson("data/Associations.json", Association[].class);
+        associations = parser.readOnJson("data/Associations.json", Association[].class);
+        String workspaceId = "";
+        for (Workspace workspace : workspaces) {
+            if(pickWorkspace.getValue().equals(workspace.getName())) {
+                workspaceId = workspace.getId();
+                break;
+            }
+        }
 
-        for (Activity activity : activities) {
-            
-            for (Association association : associations) {
-                if (association.getActivityId().equals(activityList.getSelectionModel().getSelectedItem())) {
-                    // userList.setCellFactory(new Callback<ListView<String>,ListCell<String>>(){
-                        //     @Override
-                        //     public ListCell<String> call(ListView<String> param) {
-                        //         return new ListCell<String>() {
-                        //             @Override
-                        //             protected void updateItem(String item, boolean empty) {
-                        //                 super.updateItem(item, empty);
-                        //                 setText(item);
-                        //                 // Fill the "done" cell with color -> "#58FF2D" = light green
-                        //                 setBackground(new Background(new BackgroundFill(Paint.valueOf("#58FF2D"), CornerRadii.EMPTY, Insets.EMPTY)));
-                        //             }
-                        //         };
-                        //     }
-                        // });
+        boolean bool = true;
+
+        for (Association association : associations) {
+            String currentUser = pickUser.getValue();
+            String currentWorkspace = association.getUser();
+            if (association.getUser().equals(pickUser.getValue())) {
+                if (association.getWorkspaceId().equals(workspaceId)) {
+                    bool = false;
+                    break;
+                }else{
+                    bool = true;
                 }
             }
         }
 
+        if (bool) {
+            associations.add(new Association(pickUser.getValue(), workspaceId));
+            parser.writeOnJson("data/Associations.json", associations);
+        }
     }
 
     private void loadUser(){
-        userList.getItems().remove(0, userList.getItems().size());
+        pickUser.getItems().remove(0, pickUser.getItems().size());
         JsonParser<User> parser = new JsonParser<User>();
         this.users = parser.readOnJson("data/Users.json", User[].class);
         
         for (User user : users) {
-            userList.getItems().add(user.getUsername());
-        }
-
-        // observableList.removeAll(observableList);
-        // observableList.addAll(names);
-        // userList.getItems().addAll(observableList);
-    }
-
-    public void loadListView() {
-        activityList.getItems().remove(0, activityList.getItems().size());
-        
-        for (Workspace workspace : workspaces) {
-            if(workspace.getName().equals(pickWorkspace.getValue())) {
-                activities = workspaces.get(workspaces.indexOf(workspace)).getActivities();
-                break;
-            }
-        }
-        
-        for (Activity activity : activities) {
-            activityList.getItems().add(activity.getName());
-        }
-
-        // observableList.removeAll(observableList);
-        // observableList.addAll(names);
-        // activityList.getItems().addAll(observableList);
-    }
-
-    private void loadCheckBox(){
-        String filename = "data/Workspace.json";
-        JsonParser<Workspace> parser = new JsonParser<Workspace>();
-        workspaces = parser.readOnJson(filename, Workspace[].class);
-        for (Workspace workspace : workspaces) {
-            pickWorkspace.getItems().add(workspace.getName());
+            pickUser.getItems().add(user.getUsername());
         }
     }
 
@@ -126,16 +86,34 @@ public class FXMLAssignActivityController {
         stage.show();
     }
 
-    @FXML public void selectedWorkspace(ActionEvent event) {
-        loadListView();
-        loadUser();
-        // da finire vista activity user
+    public void loadWorkspace() {
+        String filename = "data/Workspace.json";
+		JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        this.workspaces = parser.readOnJson(filename, Workspace[].class);
+        for (Workspace workspace : workspaces) {
+            pickWorkspace.getItems().add(workspace.getName());
+        }
     }
 
-    @FXML public void handleMouseClick(MouseEvent event) {
-        associationColor();
+    // public void loadActivities() {
+    //     pickActivity.getItems().remove(0, pickActivity.getItems().size());
+        
+    //     for (Workspace workspace : workspaces) {
+    //         if(workspace.getName().equals(pickWorkspace.getValue())) {
+    //             activities = workspaces.get(workspaces.indexOf(workspace)).getActivities();
+    //             break;
+    //         }
+    //     }
+        
+    //     for (Activity activity : activities) {
+    //         pickActivity.getItems().add(activity.getName());
+    //     }
+    // }
+
+    @FXML public void selectedWorkspace() {
+        // loadActivities();
     }
-    
+
 }
 
 

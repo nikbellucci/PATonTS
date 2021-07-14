@@ -47,7 +47,8 @@
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#createActivity" text="Crea attività" />
                         <MenuItem mnemonicParsing="false" onAction="#removeActivity" text="Cancella attività" />
-                        <MenuItem mnemonicParsing="false" onAction="#assignActivity" text="Assegna attività" />
+                        <MenuItem mnemonicParsing="false" onAction="#assignActivity" text="Assegna utente ad attività" />
+                        <MenuItem mnemonicParsing="false" onAction="#unsignActivity" text="Rimuovi utente da attività" />
                      </items>
                   </Menu>
                   <Menu fx:id="preferenceMenu" mnemonicParsing="false" text="Preferenze">
