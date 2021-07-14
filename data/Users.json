@@ -29,5 +29,18 @@
     "password": "",
     "isAdmin": false,
     "chatId": 0
+  },
+  {
+    "name": "manuel",
+    "surname": "manny",
+    "email": "eo@eo.eo",
+    "username": "test15",
+    "password": "100:23a968a62250086afa2a53b3ce2c5f77:a8f1839d6c3d534e65d8c6ca978eb0ca7d6700b5aab0c48dc34f792daaee5405",
+    "birthday": {
+      "year": 2000,
+      "month": 1,
+      "day": 1
+    },
+    "isAdmin": true
   }
 ]
