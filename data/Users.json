@@ -3,24 +3,25 @@
     "name": "Leonardo",
     "surname": "Di Caprio",
     "username": "test",
-    "password": "100:aeaf668e7af46080e0e41dff30b0a6f4:d1e111ab0f58c4e5918471b7ef9873ae2f888db778124ddb3145caf05e5fb202",
+    "password": "100:98bcde034f037ac3f74f474c239577a4:ef962a2fb50097a528e5ca38b45b802200d1d0bc243ad8537b733500a7080135",
     "isAdmin": true,
-    "chatId": 478734255,
     "workspace": [
       "1",
       "2",
-      "133",
-      "3",
-      "1222"
+      "3"
     ]
   },
   {
     "name": "Pinco",
     "surname": "Pallo",
     "username": "test2",
-    "password": "100:934f7095f62b54101f26baca5958175a:6748db1e600f68e670d845a91ec2cd938964241568662af9586fbea82917ad95",
+    "password": "100:ce884c852991d601763f1494cad44013:762dd74cb233e8a1109883565a442ea91e4bbe54ecb3e04751fb840b4b6579a7",
     "isAdmin": false,
-    "chatId": 0
+    "workspace": [
+      "2",
+      "1",
+      "3"
+    ]
   },
   {
     "name": "Pincos",
@@ -28,19 +29,10 @@
     "username": "test3",
     "password": "",
     "isAdmin": false,
-    "chatId": 0
-  },
-  {
-    "name": "manuel",
-    "surname": "manny",
-    "email": "eo@eo.eo",
-    "username": "test15",
-    "password": "100:23a968a62250086afa2a53b3ce2c5f77:a8f1839d6c3d534e65d8c6ca978eb0ca7d6700b5aab0c48dc34f792daaee5405",
-    "birthday": {
-      "year": 2000,
-      "month": 1,
-      "day": 1
-    },
-    "isAdmin": true
+    "workspace": [
+      "2",
+      "3",
+      "1"
+    ]
   }
 ]

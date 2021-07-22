@@ -35,35 +35,81 @@ public class FXMLAssignActivityController {
         loadWorkspace();
     }
 
+    // @FXML public void linkActivity() {
+    //     JsonParser<Association> parser = new JsonParser<Association>();
+    //     associations = parser.readOnJson("data/Associations.json", Association[].class);
+    //     String workspaceId = "";
+    //     for (Workspace workspace : workspaces) {
+    //         if(pickWorkspace.getValue().equals(workspace.getName())) {
+    //             workspaceId = workspace.getId();
+    //             break;
+    //         }
+    //     }
+
+    //     boolean bool = true;
+
+    //     for (Association association : associations) {
+            // if (association.getUser().equals(pickUser.getValue())) {
+            //     if (association.getWorkspaceId().equals(workspaceId)) {
+            //         bool = false;
+            //         break;
+            //     }else{
+            //         bool = true;
+            //     }
+            // }
+    //     }
+
+    //     if (bool) {
+    //         associations.add(new Association(pickUser.getValue(), workspaceId));
+    //         parser.writeOnJson("data/Associations.json", associations);
+    //     }
+    // }
+
     @FXML public void linkActivity() {
-        JsonParser<Association> parser = new JsonParser<Association>();
-        associations = parser.readOnJson("data/Associations.json", Association[].class);
+        ArrayList<String> workspaceOnUser = new ArrayList<>();
+
+        
+
         String workspaceId = "";
         for (Workspace workspace : workspaces) {
             if(pickWorkspace.getValue().equals(workspace.getName())) {
                 workspaceId = workspace.getId();
-                break;
             }
         }
 
-        boolean bool = true;
-
-        for (Association association : associations) {
-            String currentUser = pickUser.getValue();
-            String currentWorkspace = association.getUser();
-            if (association.getUser().equals(pickUser.getValue())) {
-                if (association.getWorkspaceId().equals(workspaceId)) {
-                    bool = false;
-                    break;
-                }else{
+        boolean bool = false;
+        String username = "";
+        for (User user : users ) {
+            if (user.getUsername().equals(pickUser.getValue())) {
+                workspaceOnUser = user.getWorkArray();
+                if (workspaceOnUser.isEmpty()) {
                     bool = true;
+                    username = user.getUsername();
+                    break;
+                }
+                for (String workspaceString : workspaceOnUser) {
+                    if (workspaceString.equals(workspaceId)) {
+                        bool = false;
+                        break;
+                    }else{
+                        bool = true;
+                        username = user.getUsername();
+                    }
                 }
             }
         }
+        
 
         if (bool) {
-            associations.add(new Association(pickUser.getValue(), workspaceId));
-            parser.writeOnJson("data/Associations.json", associations);
+            for (User user : users) {
+                if (user.getUsername().equals(username)) {
+                    JsonParser<User> parser = new JsonParser<User>();
+                    workspaceOnUser.add(workspaceId);
+                    user.setWorkArray(workspaceOnUser);
+                    parser.writeOnJson("data/Users.json", users);
+                }
+                
+            }
         }
     }
 

@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
@@ -36,6 +37,8 @@ public class FXMLWorkspaceController {
     @FXML private Menu userMenu;
     @FXML private Menu activityMenu;
     @FXML private Menu workspaceMenu;
+    @FXML private MenuItem createPreference;
+    @FXML private MenuItem removePreference;
 
     private ArrayList<Workspace> workspaces;
     private ObservableList<String> observableList = FXCollections.observableArrayList();
@@ -44,7 +47,7 @@ public class FXMLWorkspaceController {
     @FXML public void initialize() {
         receiveData();
         welcomeUser.setText("Benvenuto, " + this.user.getName() + " " + this.user.getSurname());
-        loadData();
+        
 
         if (!this.user.getAdminPermission()) {
             userMenu.setDisable(true);
@@ -53,6 +56,13 @@ public class FXMLWorkspaceController {
             workspaceMenu.setVisible(false);
             activityMenu.setDisable(true);
             activityMenu.setVisible(false);
+            createPreference.setDisable(true);
+            createPreference.setVisible(false);
+            removePreference.setDisable(true);
+            removePreference.setVisible(false);
+            loadDataNotAdmin();
+        }else {
+            loadDataAdmin();
         }
 
     }
@@ -62,7 +72,7 @@ public class FXMLWorkspaceController {
         this.user = holder.getUser();
     }
 
-    private void loadData(){
+    private void loadDataAdmin(){
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
         this.workspaces = parser.readOnJson("data/Workspace.json", Workspace[].class);
         ArrayList<String> names = new ArrayList<String>();
@@ -74,10 +84,25 @@ public class FXMLWorkspaceController {
         observableList.removeAll(observableList);
         observableList.addAll(names);
         workspaceList.getItems().addAll(observableList);
+    }
 
-        /* 
-            Tab activity da finire
-        */
+    private void loadDataNotAdmin(){
+        JsonParser<Workspace> parser = new JsonParser<Workspace>();
+        JsonParser<User> parserUser = new JsonParser<User>();
+        this.workspaces = parser.readOnJson("data/Workspace.json", Workspace[].class);
+        ArrayList<String> names = new ArrayList<String>();
+
+        for (Workspace workspace : workspaces) {
+            for (String workspaceId : this.user.getWorkArray()) {
+                if (workspaceId.equals(workspace.getId())) {
+                    names.add(workspace.getName());
+                }
+            }
+        }
+
+        observableList.removeAll(observableList);
+        observableList.addAll(names);
+        workspaceList.getItems().addAll(observableList);
     }
 
     @FXML public void handleMouseClick(MouseEvent event) {

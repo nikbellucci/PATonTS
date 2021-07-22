@@ -124,27 +124,5 @@
         "preferencies": []
       }
     ]
-  },
-  {
-    "id": "werw",
-    "name": "werwer",
-    "description": "wrwrwre",
-    "category": "werwer",
-    "expiration": {
-      "year": 2021,
-      "month": 7,
-      "day": 25
-    },
-    "activities": [
-      {
-        "id": "werwer",
-        "name": "werwer",
-        "description": "werwerwer",
-        "where": "werwer",
-        "when": "",
-        "availableSeats": 0,
-        "preferencies": []
-      }
-    ]
   }
 ]

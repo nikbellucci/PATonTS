@@ -53,8 +53,8 @@
                   </Menu>
                   <Menu fx:id="preferenceMenu" mnemonicParsing="false" text="Preferenze">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#createPreference" text="Crea preferenza" />
-                        <MenuItem mnemonicParsing="false" onAction="#removePreference" text="Elimina preferenza" />
+                        <MenuItem fx:id="createPreference" mnemonicParsing="false" onAction="#createPreference" text="Crea preferenza" />
+                        <MenuItem fx:id="removePreference" mnemonicParsing="false" onAction="#removePreference" text="Elimina preferenza" />
                         <MenuItem mnemonicParsing="false" onAction="#addAnswerPreference" text="Aggiungi la tua preferenza" />
                      </items>
                   </Menu>

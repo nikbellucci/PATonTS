@@ -15,9 +15,9 @@ public class Seed {
         try {
             User person = new User("Leonardo", "Di Caprio", "test", "", true);
             User person2 = new User("Pinco", "Pallo", "test2", "", false);
-            Workspace workspace = new Workspace("Test workspace", "test descrizione", "test categoria", LocalDate.parse("2020-01-08"));
-            Workspace workspace1 = new Workspace("Test workspace1", "test descrizione", "test categoria", LocalDate.parse("2020-01-08"));
-            Workspace workspace2 = new Workspace("Test workspace2", "test descrizione", "test categoria", LocalDate.parse("2020-01-08"));
+            Workspace workspace = new Workspace("1","Test workspace", "test descrizione", "test categoria", LocalDate.parse("2020-01-08"));
+            Workspace workspace1 = new Workspace("2","Test workspace1", "test descrizione", "test categoria", LocalDate.parse("2020-01-08"));
+            Workspace workspace2 = new Workspace("3","Test workspace2", "test descrizione", "test categoria", LocalDate.parse("2020-01-08"));
             Association association = new Association("test", "test", "test");
 
             String generatedSecuredPasswordHash = Auth.generateStorngPasswordHash("test");

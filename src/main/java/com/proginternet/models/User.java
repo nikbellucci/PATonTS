@@ -27,6 +27,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.workspace = new ArrayList<>();
     }
 
     public User(String name, String surname, String username, String password, LocalDate birthday) {
@@ -35,6 +36,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.birthday = birthday;
+        this.workspace = new ArrayList<>();
     }
 
     public User(String name, String surname, String username, String password, LocalDate birthday, boolean isAdmin) {
@@ -44,6 +46,7 @@ public class User {
         this.password = password;
         this.birthday = birthday;
         this.isAdmin = isAdmin;
+        this.workspace = new ArrayList<>();
     }
 
     public void setPassword(String password) {
