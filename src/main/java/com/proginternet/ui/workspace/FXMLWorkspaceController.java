@@ -88,7 +88,6 @@ public class FXMLWorkspaceController {
 
     private void loadDataNotAdmin(){
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
-        JsonParser<User> parserUser = new JsonParser<User>();
         this.workspaces = parser.readOnJson("data/Workspace.json", Workspace[].class);
         ArrayList<String> names = new ArrayList<String>();
 

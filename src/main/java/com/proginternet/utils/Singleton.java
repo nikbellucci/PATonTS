@@ -1,5 +1,7 @@
 package com.proginternet.utils;
 
+import java.util.ArrayList;
+
 import com.proginternet.models.User;
 
 public class Singleton {

@@ -17,7 +17,13 @@
         "where": "test",
         "when": "test",
         "availableSeats": 5,
-        "preferencies": []
+        "preferencies": [
+          {
+            "id": "fdsf",
+            "name": "sdfsdf",
+            "description": "fsdfsd"
+          }
+        ]
       },
       {
         "id": "3",
@@ -112,7 +118,13 @@
         "where": "test",
         "when": "test",
         "availableSeats": 5,
-        "preferencies": []
+        "preferencies": [
+          {
+            "id": "34",
+            "name": "test preferenza",
+            "description": "test preferenza"
+          }
+        ]
       },
       {
         "id": "9",

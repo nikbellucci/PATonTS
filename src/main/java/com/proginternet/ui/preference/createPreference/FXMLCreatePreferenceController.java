@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 public class FXMLCreatePreferenceController {
 
     @FXML private Text creationMsg;
+    @FXML private TextField idField;
 	@FXML private TextField nameField;
     @FXML private TextArea descriptionField;
     @FXML private Button backButton;
@@ -55,7 +56,7 @@ public class FXMLCreatePreferenceController {
             }
         }
         
-        preferencies.add(new Preference(nameField.getText(), descriptionField.getText()));
+        preferencies.add(new Preference(idField.getText(), nameField.getText(), descriptionField.getText()));
         
         parser.writeOnJson(filename, workspaces);
 		creationMsg.setText("Registration successfull!");
