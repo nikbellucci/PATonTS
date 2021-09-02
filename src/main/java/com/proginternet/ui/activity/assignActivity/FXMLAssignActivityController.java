@@ -68,8 +68,6 @@ public class FXMLAssignActivityController {
     @FXML public void linkActivity() {
         ArrayList<String> workspaceOnUser = new ArrayList<>();
 
-        
-
         String workspaceId = "";
         for (Workspace workspace : workspaces) {
             if(pickWorkspace.getValue().equals(workspace.getName())) {

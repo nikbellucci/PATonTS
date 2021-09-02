@@ -17,13 +17,7 @@
         "where": "test",
         "when": "test",
         "availableSeats": 5,
-        "preferencies": [
-          {
-            "id": "fdsf",
-            "name": "sdfsdf",
-            "description": "fsdfsd"
-          }
-        ]
+        "preferencies": []
       },
       {
         "id": "3",
@@ -41,15 +35,6 @@
         "where": "test",
         "when": "test",
         "availableSeats": 5,
-        "preferencies": []
-      },
-      {
-        "id": "534",
-        "name": "rwerwe",
-        "description": "rwerwer",
-        "where": "rwerwer",
-        "when": "",
-        "availableSeats": 0,
         "preferencies": []
       }
     ]
@@ -81,7 +66,13 @@
         "where": "test",
         "when": "test",
         "availableSeats": 5,
-        "preferencies": []
+        "preferencies": [
+          {
+            "id": "6",
+            "name": "fds",
+            "description": "ffsdf"
+          }
+        ]
       },
       {
         "id": "6",
@@ -102,38 +93,29 @@
   },
   {
     "id": "3",
-    "name": "Test workspace2",
-    "description": "test descrizione",
-    "category": "test categoria",
+    "name": "Test workspace3",
+    "description": "Test workspace3",
+    "category": "",
     "expiration": {
-      "year": 2020,
-      "month": 1,
-      "day": 8
+      "year": 2021,
+      "month": 10,
+      "day": 22
     },
     "activities": [
       {
-        "id": "8",
-        "name": "test8",
-        "description": "test",
-        "where": "test",
-        "when": "test",
-        "availableSeats": 5,
+        "id": "3425",
+        "name": "43252",
+        "description": "452345",
+        "where": "54325324",
+        "when": "",
+        "availableSeats": 0,
         "preferencies": [
           {
-            "id": "34",
-            "name": "test preferenza",
-            "description": "test preferenza"
+            "id": "435q",
+            "name": "qewt",
+            "description": "erwtwert"
           }
         ]
-      },
-      {
-        "id": "9",
-        "name": "test9",
-        "description": "test",
-        "where": "test",
-        "when": "test",
-        "availableSeats": 5,
-        "preferencies": []
       }
     ]
   }

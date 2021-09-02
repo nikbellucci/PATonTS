@@ -12,5 +12,19 @@
     "activityId": "6",
     "preferenceId": "1",
     "preferenceAnswer": "5:00"
+  },
+  {
+    "user": "test",
+    "workspaceId": "2",
+    "activityId": "5",
+    "preferenceId": "6",
+    "preferenceAnswer": "ciao sono una preferenza"
+  },
+  {
+    "user": "test2",
+    "workspaceId": "3",
+    "activityId": "3425",
+    "preferenceId": "435q",
+    "preferenceAnswer": "ciao sono il test della preferenza"
   }
 ]

@@ -16,16 +16,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class FXMLUnsignActivityController {
     
-    @FXML private ListView<String> userList;
     @FXML private Button backButton;
     @FXML private ChoiceBox<String> pickWorkspace;
-    @FXML private ListView<String> activityList;
+    @FXML private ChoiceBox<String> pickUser;
 
     private ArrayList<Activity> activities;
     private ArrayList<Workspace> workspaces;
@@ -38,36 +36,45 @@ public class FXMLUnsignActivityController {
     }
 
     private void loadUser(){
-        userList.getItems().remove(0, userList.getItems().size());
+        pickUser.getItems().remove(0, pickUser.getItems().size());
         JsonParser<User> parser = new JsonParser<User>();
         this.users = parser.readOnJson("data/Users.json", User[].class);
         
         for (User user : users) {
-            userList.getItems().add(user.getUsername());
+            pickUser.getItems().add(user.getUsername());
         }
-
-        // observableList.removeAll(observableList);
-        // observableList.addAll(names);
-        // userList.getItems().addAll(observableList);
     }
 
-    public void loadListView() {
-        activityList.getItems().remove(0, activityList.getItems().size());
-        
+    @FXML public void unsignActivity() {
+        ArrayList<String> workspaceOnUser = new ArrayList<>();
+
+        String workspaceId = "";
         for (Workspace workspace : workspaces) {
-            if(workspace.getName().equals(pickWorkspace.getValue())) {
-                activities = workspaces.get(workspaces.indexOf(workspace)).getActivities();
-                break;
+            if(pickWorkspace.getValue().equals(workspace.getName())) {
+                workspaceId = workspace.getId();
             }
         }
-        
-        for (Activity activity : activities) {
-            activityList.getItems().add(activity.getName());
+
+        String username = "";
+        for (User user : users ) {
+            if (user.getUsername().equals(pickUser.getValue())) {
+                workspaceOnUser = user.getWorkArray();
+                username = user.getUsername();
+            }
         }
 
-        // observableList.removeAll(observableList);
-        // observableList.addAll(names);
-        // activityList.getItems().addAll(observableList);
+        if (workspaceOnUser.contains(workspaceId)) {
+            for (User user : users) {
+                if (user.getUsername().equals(username)) {
+                    JsonParser<User> parser = new JsonParser<User>();
+                    workspaceOnUser.remove(workspaceOnUser.indexOf(workspaceId));
+                    user.setWorkArray(workspaceOnUser);
+                    parser.writeOnJson("data/Users.json", users);
+                    break;
+                }
+                
+            }
+        }
     }
 
     private void loadWorkspace(){
@@ -89,7 +96,7 @@ public class FXMLUnsignActivityController {
     }
 
     @FXML public void selectedWorkspace(ActionEvent event) {
-        loadListView();
+        // loadListView();
         // da finire vista activity user
     }
 
