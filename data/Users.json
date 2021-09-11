@@ -5,6 +5,7 @@
     "username": "test",
     "password": "100:98bcde034f037ac3f74f474c239577a4:ef962a2fb50097a528e5ca38b45b802200d1d0bc243ad8537b733500a7080135",
     "isAdmin": true,
+    "chatId": 478734255,
     "workspace": [
       "1",
       "2",
@@ -17,6 +18,7 @@
     "username": "test2",
     "password": "100:ce884c852991d601763f1494cad44013:762dd74cb233e8a1109883565a442ea91e4bbe54ecb3e04751fb840b4b6579a7",
     "isAdmin": false,
+    "chatId": 0,
     "workspace": [
       "1"
     ]
@@ -27,6 +29,7 @@
     "username": "test3",
     "password": "",
     "isAdmin": false,
+    "chatId": 0,
     "workspace": [
       "2",
       "3",

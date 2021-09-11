@@ -28,6 +28,7 @@ public class Workspace {
     }
 
     public Workspace() {
+        this.id = "";
         this.name = "";
         this.description = "";
         this.category = "";

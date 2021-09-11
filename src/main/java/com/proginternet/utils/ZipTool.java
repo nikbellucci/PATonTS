@@ -20,7 +20,7 @@ public class ZipTool {
         if(!dir.exists()) dir.mkdirs();
         FileInputStream fis;
         //buffer for read and write data to file
-        byte[] buffer = new byte[2048];
+        byte[] buffer = new byte[1024];
         try {
             fis = new FileInputStream(zipFilePath);
             ZipInputStream zis = new ZipInputStream(fis);
@@ -28,8 +28,9 @@ public class ZipTool {
             while(ze != null){
                 String fileName = ze.getName();
                 File newFile = new File(destDir + File.separator + fileName);
-                System.out.println("Unzipping to " + newFile.getAbsolutePath());
+                System.out.println("Unzipping to "+ newFile.getAbsolutePath());
                 //create directories for sub directories in zip
+                System.out.println(newFile.getAbsolutePath());
                 new File(newFile.getParent()).mkdirs();
                 FileOutputStream fos = new FileOutputStream(newFile);
                 int len;
@@ -45,8 +46,7 @@ public class ZipTool {
             zis.closeEntry();
             zis.close();
             fis.close();
-            System.out.println("Unzip done!");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         

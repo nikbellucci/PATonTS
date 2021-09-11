@@ -248,12 +248,12 @@ public class FXMLWorkspaceController {
         }
     }
 
-    @FXML public void importFile(ActionEvent evente ) {
+    @FXML public void importFile(ActionEvent event) {
         FileChooser file = new FileChooser();
         ExtensionFilter filter = new ExtensionFilter("ZIP Files", "*.zip");
         file.getExtensionFilters().add(filter);
         file.setSelectedExtensionFilter(filter);
-        file.setTitle("porco dio");
+        file.setTitle("test");
         Stage stage = (Stage) welcomeUser.getScene().getWindow();
 		File response = file.showOpenDialog(stage);
         if (response != null) {
