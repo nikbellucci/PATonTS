@@ -32,4 +32,8 @@ public class Preference {
     public String getDescrizione(){
         return this.description;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

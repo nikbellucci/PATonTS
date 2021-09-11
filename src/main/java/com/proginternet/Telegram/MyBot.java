@@ -151,6 +151,7 @@ public class MyBot extends TelegramLongPollingBot {
                 if (param.isEmpty()) {
                     try {
                         newUs.setPassword(Auth.generateStorngPasswordHash(newUs.getPassword()));
+                        newUs.setChat((long)0);
                         updateOnJsonUserId(newUs, null);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1112,6 +1113,7 @@ public class MyBot extends TelegramLongPollingBot {
         JsonParser<Workspace> parser = new JsonParser<Workspace>();
         ArrayList<Workspace> ws = parser.readOnJson(filename, Workspace[].class);
         Preference result = new Preference();
+        result.setId("");
         for (Workspace works : ws) {
             if (works.getId().equals(idWS)) {
                 for (Activity a : works.getActivities()) {
@@ -1311,6 +1313,7 @@ public class MyBot extends TelegramLongPollingBot {
             return selectedActivity(actWSid ,id).getId().equals(id);
         }else{
             return selectedPref(actWSid, prefACTid, id).getId().equals(id);
+            // return !(selectedPref(actWSid, prefACTid, id).getId().equals(null));
         }
 
     }

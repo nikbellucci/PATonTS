@@ -35,5 +35,75 @@
       "3",
       "1"
     ]
+  },
+  {
+    "name": "non",
+    "surname": "va",
+    "email": "ciccio.ciccio@ciccio.it",
+    "username": "ciccio",
+    "password": "100:4cfc78e3ce6a7a649b6a68b39776bdb8:b8bf08262112765ecad2c4be60ca6d38b4a907d7d272f4263db39702a2d36aff",
+    "birthday": {
+      "year": 2000,
+      "month": 1,
+      "day": 1
+    },
+    "isAdmin": false,
+    "chatId": 0
+  },
+  {
+    "name": "a",
+    "surname": "b",
+    "email": "c@c.com",
+    "username": "ccc",
+    "password": "100:99c02877241da4fb7d5a2d06a579b876:64332fdbcdff3bb76551ea8c1896bec8da47375e683609cf562917b0b2dc2ce2",
+    "birthday": {
+      "year": 1985,
+      "month": 9,
+      "day": 15
+    },
+    "isAdmin": true,
+    "chatId": 0
+  },
+  {
+    "name": "nonno",
+    "surname": "nonno",
+    "email": "n@n.com",
+    "username": "nonno",
+    "password": "100:a4934a88bb97b5840d4418b361d525e6:52b173476dd62812c1eaff6880efe089f1bc8fe2d243da6993ef2a482a650563",
+    "birthday": {
+      "year": 1983,
+      "month": 3,
+      "day": 5
+    },
+    "isAdmin": false,
+    "chatId": 0
+  },
+  {
+    "name": "dasda",
+    "surname": "asda",
+    "email": "ads",
+    "username": "asd",
+    "password": "100:f9c991eee9e482216579dc47d9b4751e:af7ea68cea0ba4462410c864bf1f342246aa347197aabc4655ce4f26b0e51215",
+    "birthday": {
+      "year": 2000,
+      "month": 1,
+      "day": 1
+    },
+    "isAdmin": false,
+    "chatId": 0
+  },
+  {
+    "name": "nononon",
+    "surname": "frmsd",
+    "email": "dfsfsd",
+    "username": "asdf",
+    "password": "100:4f34f90fceda13db772452d0f5192cf3:9a7e7a2c543ed64fda5a99b1eaf57a9ec47d3580c1b241c658137887ec72186e",
+    "birthday": {
+      "year": 2000,
+      "month": 4,
+      "day": 4
+    },
+    "isAdmin": false,
+    "chatId": 0
   }
 ]

@@ -11,15 +11,6 @@
     },
     "activities": [
       {
-        "id": "1",
-        "name": "test1",
-        "description": "test",
-        "where": "test",
-        "when": "test",
-        "availableSeats": 5,
-        "preferencies": []
-      },
-      {
         "id": "3",
         "name": "test3",
         "description": "test",
@@ -36,6 +27,21 @@
         "when": "test",
         "availableSeats": 5,
         "preferencies": []
+      },
+      {
+        "id": "1",
+        "name": "test1",
+        "description": "test",
+        "where": "test",
+        "when": "test",
+        "availableSeats": 5,
+        "preferencies": [
+          {
+            "id": "34",
+            "name": "nonono",
+            "description": "nonon"
+          }
+        ]
       }
     ]
   },
